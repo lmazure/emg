@@ -2,9 +2,13 @@ package fr.mazure.maven.emg;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 
 /* 
@@ -19,20 +23,33 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
  * Hello world!
  *
  */
+@SuppressWarnings("deprecation")
 public class App 
 {
     public static void main( String[] args )
     {
+
+        final String filename = "H:\\Documents\\tmp\\SPEC_GENERIQUE_Fichier de base.odt";
         
         try {
-            final XWPFDocument docx = new XWPFDocument(new FileInputStream("H:\\Documents\\tmp\\SPEC_GENERIQUE_Fichier de base.odt"));
-            final XWPFWordExtractor we = new XWPFWordExtractor(docx);
-            System.out.println(we.getText());
-        } catch (final IOException e) {
+
+            final ZipFile zFile = new ZipFile(filename);
+            System.out.println(zFile.getName());
+
+            final ZipEntry contentFile = zFile.getEntry("content.xml");
+
+            System.out.println(contentFile.getName());
+            System.out.println(contentFile.getSize());
+            //XMLReader xr = XMLReaderFactory.createXMLReader();
+            //OdtDocumentContentHandler handler = new OdtDocumentContentHandler();
+            //xr.setContentHandler(handler);
+
+            //xr.parse(new InputSource(zFile.getInputStream(contentFile)));
+
+        } catch (final Exception e) {
+
             e.printStackTrace();
+
         }
-        
-        //using XWPFWordExtractor Class
-        
     }
 }

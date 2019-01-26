@@ -1,14 +1,7 @@
 package fr.mazure.maven.emg;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
-import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 
 /* 
@@ -23,7 +16,6 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * Hello world!
  *
  */
-@SuppressWarnings("deprecation")
 public class App 
 {
     public static void main( String[] args )

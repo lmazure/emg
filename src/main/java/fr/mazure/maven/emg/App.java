@@ -33,26 +33,38 @@ public class App
     {
 
         final String filename = "H:\\Documents\\tmp\\SPEC_GENERIQUE_Fichier de base.odt";
+        Document document = extractXmlContent(filename);
+
+        final Element racine = document.getDocumentElement();
+        final NodeList list = racine.getElementsByTagName("table:table");
+
+        for (int i = 0; i < list.getLength(); i++){
+            final Element articleNode = (Element)list.item(i);
+            final String tableName = articleNode.getAttributeNode("table:name").getValue();
+            System.out.println("table " + i + " : " + tableName);
+        }
+    }
+
+    private static Document extractXmlContent(final String filename)
+    {
         final String contentfilename = "content.xml";
 
         DocumentBuilder builder = createDocumentBuilder();
 
-        ZipFile zFile = null;
+        ZipFile zipFile = null;
         ZipEntry contentFile = null;
         try {
-            zFile = new ZipFile(filename);
-            System.out.println(zFile.getName());
-            contentFile = zFile.getEntry(contentfilename);
+            zipFile = new ZipFile(filename);
+            contentFile = zipFile.getEntry(contentfilename);
         } catch (final Exception e) {
-            System.err.println("Failed get '" + contentfilename + "': " + e);
+            System.err.println("Failed to extract '" + contentfilename + "': " + e);
             e.printStackTrace();
             System.exit(1);
-        }
-        
+        }        
 
         Document document = null;
-        try{
-            document = builder.parse(new InputSource(zFile.getInputStream(contentFile)));
+        try {
+            document = builder.parse(new InputSource(zipFile.getInputStream(contentFile)));
         } catch (final SAXException se){
             System.err.println("Failed to parse the XML file");
             se.printStackTrace();
@@ -62,21 +74,15 @@ public class App
             ioe.printStackTrace();
             System.exit(1);
         }
-
-        final Element racine = document.getDocumentElement();
-        final NodeList list = racine.getElementsByTagName("table:table");
-
-        for(int i = 0; i < list.getLength(); i++){
-            final Element articleNode = (Element)list.item(i);
-            final String tableName = articleNode.getAttributeNode("table:name").getValue();
-            System.out.println("tableau " + i + " : " + tableName);
-        }
+        
+        return document;
     }
 
-    private static DocumentBuilder createDocumentBuilder() {
+    private static DocumentBuilder createDocumentBuilder()
+    {
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = null;
-        try{
+        try {
             builder = factory.newDocumentBuilder();
         } catch (final ParserConfigurationException e){
             System.err.println("Failed to configure the XML parser: " + e);

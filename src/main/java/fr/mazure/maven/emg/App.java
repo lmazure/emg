@@ -97,7 +97,36 @@ public class App
     private static void extractTable(final Element node) {
 
         final String tableName = node.getAttributeNode("table:name").getValue();
-        System.out.println("table: " + tableName);
 
+        int numberOfColumns = 0;
+        int numberOfRows = 0;
+        final NodeList children = node.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++ ){
+            final Element child = (Element)children.item(i);
+            if (child.getNodeName().equals("table:table-column")) numberOfColumns++;
+            if (child.getNodeName().equals("table:table-row")) numberOfRows++;
+        }
+        
+        final Table table = new Table(numberOfColumns, numberOfRows, tableName);
+
+        int rowNumber = 0;
+        for (int i = 0; i < children.getLength(); i++) {
+            final Element child = (Element)children.item(i);
+            if (child.getNodeName().equals("table:table-row")) {
+                int columnNumber = 0;
+                final NodeList greatChildren = child.getChildNodes();
+                for (int j = 0; j < greatChildren.getLength(); j++) {
+                    final Element greatChild = (Element)greatChildren.item(j);
+                    //System.out.println(greatChild.getNodeName());
+                    if (greatChild.getNodeName().equals("table:table-cell")) {
+                        final String content = greatChild.getTextContent();
+                        table.setCellContent(columnNumber, rowNumber, content);
+                        columnNumber++;
+                    }
+                }
+                rowNumber++;
+            }
+        }
+        
     }
 }

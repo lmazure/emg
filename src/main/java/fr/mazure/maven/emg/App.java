@@ -90,10 +90,14 @@ public class App
         final NodeList list = racine.getElementsByTagName("table:table");
 
         for (int i = 0; i < list.getLength(); i++){
-            final Element articleNode = (Element)list.item(i);
-            final String tableName = articleNode.getAttributeNode("table:name").getValue();
-            System.out.println("table " + i + " : " + tableName);
+            extractTable((Element)list.item(i));
         }
+    }
+    
+    private static void extractTable(final Element node) {
+
+        final String tableName = node.getAttributeNode("table:name").getValue();
+        System.out.println("table: " + tableName);
 
     }
 }

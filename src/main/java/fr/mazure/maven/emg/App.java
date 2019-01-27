@@ -34,15 +34,7 @@ public class App
 
         final String filename = "H:\\Documents\\tmp\\SPEC_GENERIQUE_Fichier de base.odt";
         Document document = extractXmlContent(filename);
-
-        final Element racine = document.getDocumentElement();
-        final NodeList list = racine.getElementsByTagName("table:table");
-
-        for (int i = 0; i < list.getLength(); i++){
-            final Element articleNode = (Element)list.item(i);
-            final String tableName = articleNode.getAttributeNode("table:name").getValue();
-            System.out.println("table " + i + " : " + tableName);
-        }
+        extractTables(document);
     }
 
     private static Document extractXmlContent(final String filename)
@@ -90,5 +82,18 @@ public class App
             System.exit(1);
         }
         return builder;
+    }
+    
+    private static void extractTables(final Document document) {
+
+        final Element racine = document.getDocumentElement();
+        final NodeList list = racine.getElementsByTagName("table:table");
+
+        for (int i = 0; i < list.getLength(); i++){
+            final Element articleNode = (Element)list.item(i);
+            final String tableName = articleNode.getAttributeNode("table:name").getValue();
+            System.out.println("table " + i + " : " + tableName);
+        }
+
     }
 }

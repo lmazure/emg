@@ -1,19 +1,6 @@
 package fr.mazure.maven.emg;
 
-import java.io.IOException;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
+import java.io.File;
 
 /* 
  * POI does not work
@@ -33,100 +20,8 @@ public class App
     {
 
         final String filename = "H:\\Documents\\tmp\\SPEC_GENERIQUE_Fichier de base.odt";
-        Document document = extractXmlContent(filename);
-        extractTables(document);
-    }
-
-    private static Document extractXmlContent(final String filename)
-    {
-        final String contentfilename = "content.xml";
-
-        DocumentBuilder builder = createDocumentBuilder();
-
-        ZipFile zipFile = null;
-        ZipEntry contentFile = null;
-        try {
-            zipFile = new ZipFile(filename);
-            contentFile = zipFile.getEntry(contentfilename);
-        } catch (final Exception e) {
-            System.err.println("Failed to extract '" + contentfilename + "': " + e);
-            e.printStackTrace();
-            System.exit(1);
-        }        
-
-        Document document = null;
-        try {
-            document = builder.parse(new InputSource(zipFile.getInputStream(contentFile)));
-        } catch (final SAXException se){
-            System.err.println("Failed to parse the XML file");
-            se.printStackTrace();
-            System.exit(1);
-        } catch (final IOException ioe){
-            System.err.println("Failed to read the XML file");
-            ioe.printStackTrace();
-            System.exit(1);
-        }
         
-        return document;
-    }
-
-    private static DocumentBuilder createDocumentBuilder()
-    {
-        final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = null;
-        try {
-            builder = factory.newDocumentBuilder();
-        } catch (final ParserConfigurationException e){
-            System.err.println("Failed to configure the XML parser: " + e);
-            e.printStackTrace();
-            System.exit(1);
-        }
-        return builder;
-    }
-    
-    private static void extractTables(final Document document) {
-
-        final Element racine = document.getDocumentElement();
-        final NodeList list = racine.getElementsByTagName("table:table");
-
-        for (int i = 0; i < list.getLength(); i++){
-            extractTable((Element)list.item(i));
-        }
-    }
-    
-    private static void extractTable(final Element node) {
-
-        final String tableName = node.getAttributeNode("table:name").getValue();
-
-        int numberOfColumns = 0;
-        int numberOfRows = 0;
-        final NodeList children = node.getChildNodes();
-        for (int i = 0; i < children.getLength(); i++ ){
-            final Element child = (Element)children.item(i);
-            if (child.getNodeName().equals("table:table-column")) numberOfColumns++;
-            if (child.getNodeName().equals("table:table-row")) numberOfRows++;
-        }
-        
-        final Table table = new Table(numberOfColumns, numberOfRows, tableName);
-
-        int rowNumber = 0;
-        for (int i = 0; i < children.getLength(); i++) {
-            final Element child = (Element)children.item(i);
-            if (child.getNodeName().equals("table:table-row")) {
-                int columnNumber = 0;
-                final NodeList greatChildren = child.getChildNodes();
-                for (int j = 0; j < greatChildren.getLength(); j++) {
-                    final Element greatChild = (Element)greatChildren.item(j);
-                    //System.out.println(greatChild.getNodeName());
-                    if (greatChild.getNodeName().equals("table:table-cell")) {
-                        final String content = greatChild.getTextContent();
-                        table.setCellContent(columnNumber, rowNumber, content);
-                        columnNumber++;
-                    }
-                }
-                rowNumber++;
-            }
-        }
-        
+        final TableExtractor extractor = new OdtTableExtractor();
+        extractor.extract(new File(filename));
     }
 }

@@ -16,15 +16,26 @@ public class Table {
         _numberOfColumns = numberOfColumns;
         _numberOfRows = numberOfRows;
         _content = new String[numberOfColumns][numberOfRows];
-
-        System.out.println("table: " + tableName + " columns=" + numberOfColumns + " rows=" + numberOfRows);
-        
     }
     
     public void setCellContent(final int column, final int row, final String content) {
         
         _content[column][row] = content;
-        
-        System.out.println("col=" + column + " row=" + row + " content=" + content);
+    }
+
+    public String getName() {
+        return _tableName;
+    }
+
+    public int getNumberOfColumns() {
+        return _numberOfColumns;
+    }
+
+    public int getNumberOfRows() {
+        return _numberOfRows;
+    }
+
+    public String getCellContent(final int column, final int row) {
+        return _content[column][row];
     }
 }

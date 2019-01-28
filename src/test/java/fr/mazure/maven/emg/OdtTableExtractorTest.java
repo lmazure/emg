@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 class OdtTableExtractorTest extends OdtTableExtractor {
 
     @Test
-    void extractOneTable() {
+    void canExtractOneTable() {
         final TableExtractor extractor = new OdtTableExtractor();
         List<Table> list = extractor.extract(new File("testdata/OneTableWithOne1x1Cell.odt"));
 
@@ -22,7 +22,7 @@ class OdtTableExtractorTest extends OdtTableExtractor {
     }
 
     @Test
-    void extractThreeTable() {
+    void canExtractThreeTable() {
         final TableExtractor extractor = new OdtTableExtractor();
         List<Table> list = extractor.extract(new File("testdata/ThreeTables2x3_4x1_1x5.odt"));
 
@@ -54,6 +54,21 @@ class OdtTableExtractorTest extends OdtTableExtractor {
         assertEquals("m", list.get(2).getCellContent(2, 0));
         assertEquals("n", list.get(2).getCellContent(3, 0));
         assertEquals("o", list.get(2).getCellContent(4, 0));
-}
+    }
+
+    @Test
+    void ignoreTableInTable() {
+        final TableExtractor extractor = new OdtTableExtractor();
+        List<Table> list = extractor.extract(new File("testdata/TableInTable.odt"));
+
+        assertEquals(1, list.size());
+        assertEquals("Table1", list.get(0).getName());
+        assertEquals(2, list.get(0).getNumberOfRows());
+        assertEquals(2, list.get(0).getNumberOfColumns());
+        assertEquals("a", list.get(0).getCellContent(0, 0));
+        assertEquals("b", list.get(0).getCellContent(1, 0));
+        assertEquals("c", list.get(0).getCellContent(0, 1));
+        assertEquals("defg", list.get(0).getCellContent(1, 1));
+    }
 
 }

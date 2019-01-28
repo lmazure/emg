@@ -81,8 +81,10 @@ public class OdtTableExtractor implements TableExtractor {
         final Element racine = document.getDocumentElement();
         final NodeList list = racine.getElementsByTagName("table:table");
 
-        for (int i = 0; i < list.getLength(); i++){
-            tableList.add(extractTable((Element)list.item(i)));
+        for (int i = 0; i < list.getLength(); i++) {
+            if (!isInTable((Element)list.item(i))) {
+                tableList.add(extractTable((Element)list.item(i)));
+            }
         }
         
         return tableList;
@@ -129,5 +131,16 @@ public class OdtTableExtractor implements TableExtractor {
         }
         
         return table;
+    }
+    
+    private static boolean isInTable(final Element node) {
+        
+        if (node.getParentNode() instanceof Document) return false;
+        
+        final Element parent = (Element)node.getParentNode();
+        
+        if (parent.getNodeName().equals("table:table")) return true;
+        
+        return isInTable(parent);
     }
 }

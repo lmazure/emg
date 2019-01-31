@@ -15,7 +15,7 @@ public class Table {
         _tableName = tableName;
         _numberOfColumns = numberOfColumns;
         _numberOfRows = numberOfRows;
-        _content = new String[numberOfColumns][numberOfRows];
+        _content = new Object[numberOfColumns][numberOfRows];
     }
     
     public void setCellContent(final int column, final int row, final String content) {
@@ -24,7 +24,7 @@ public class Table {
         if (row < 0) throw new IllegalArgumentException("row negative (" + row + ")");
         if (content == null) throw new IllegalArgumentException("content is null");
 
-        _content[column][row] = content;
+        setCell(column, row, content);
     }
 
     public void setCellContent(final CellLocation location, final String content) {
@@ -42,12 +42,13 @@ public class Table {
         if ((row + numberOfRows) > _numberOfRows) throw new IllegalArgumentException("row + numberOfRows larger than total number of rows (" + row + "+" + numberOfRows + ")");
         
         boolean isFirstCell = true;
-        final CellLocation location = new CellLocation(row, column);
+        final CellLocation location = new CellLocation(column, row);
         for (int c = 0; c < numberOfColumns; c++ ) {
             for (int r = 0; r < numberOfRows; r++ ) {
                 if (!isFirstCell) {
-                    setCell(row +r, column + c, location);
+                    setCell(column + c, row + r, location);
                 }
+                isFirstCell = false;
             }
         }
     }
@@ -57,7 +58,7 @@ public class Table {
         setCellMerge(location.getColumn(), location.getRow(), numberOfColumns, numberOfRows);
     }
     
-    private void setCell(final int column, final int row, final  Object value) {
+    private void setCell(final int column, final int row, final Object value) {
 
         if (_content[column][row] != null) throw new IllegalArgumentException("cell (" + column + "," + row + ") has already been initialized");
             

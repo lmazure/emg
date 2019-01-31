@@ -92,8 +92,10 @@ public class OdtTableExtractor implements TableExtractor {
     
     private static Table extractTable(final Element node) {
 
+        // get name of the table
         final String tableName = node.getAttributeNode("table:name").getValue();
 
+        // get the number of rows and the number of columns of the table
         int numberOfColumns = 0;
         int numberOfRows = 0;
         final NodeList children = node.getChildNodes();
@@ -102,7 +104,7 @@ public class OdtTableExtractor implements TableExtractor {
             if (child.getNodeName().equals("table:table-column")) {
                 final Attr numberColumnsRepeated = child.getAttributeNode("table:number-columns-repeated");
                 if (numberColumnsRepeated != null) {
-                    numberOfColumns += Integer.parseInt(numberColumnsRepeated.getValue());                    
+                    numberOfColumns += Integer.parseInt(numberColumnsRepeated.getValue());
                 } else {
                     numberOfColumns++;
                 }
@@ -110,8 +112,10 @@ public class OdtTableExtractor implements TableExtractor {
             if (child.getNodeName().equals("table:table-row")) numberOfRows++;
         }
         
+        // create the table
         final Table table = new Table(numberOfColumns, numberOfRows, tableName);
 
+        // fill the table
         int rowNumber = 0;
         for (int i = 0; i < children.getLength(); i++) {
             final Element child = (Element)children.item(i);
@@ -121,10 +125,21 @@ public class OdtTableExtractor implements TableExtractor {
                 for (int j = 0; j < greatChildren.getLength(); j++) {
                     final Element greatChild = (Element)greatChildren.item(j);
                     if (greatChild.getNodeName().equals("table:table-cell")) {
+                        
+                        // cell value
                         final String content = greatChild.getTextContent();
                         table.setCellContent(columnNumber, rowNumber, content);
-                        columnNumber++;
+                        
+                        // cell merge
+                        final Attr numberRowsSpanned = greatChild.getAttributeNode("table:number-rows-spanned");
+                        final Attr numberColumnsSpanned = greatChild.getAttributeNode("table:number-columns-spanned");
+                        final int rowsSpanned = (numberRowsSpanned != null) ? Integer.parseInt(numberRowsSpanned.getValue()) : 1;
+                        final int columnsSpanned = (numberColumnsSpanned != null) ? Integer.parseInt(numberColumnsSpanned.getValue()) : 1;
+                        if ((rowsSpanned !=1) || (columnsSpanned != 1)) {
+                            table.setCellMerge(columnNumber, rowNumber, columnsSpanned, rowsSpanned);
+                        }
                     }
+                    columnNumber++;
                 }
                 rowNumber++;
             }

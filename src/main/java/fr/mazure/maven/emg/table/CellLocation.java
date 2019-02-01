@@ -5,8 +5,11 @@ public class CellLocation {
     final int _row;
     final int _column;
     
+    /**
+     * @param column
+     * @param row
+     */
     public CellLocation(final int column, final int row) {
-
         if (column < 0) throw new IllegalArgumentException("column non positive (" + column + ")");
         if (row < 0) throw new IllegalArgumentException("row non positive (" + row + ")");
 
@@ -14,10 +17,16 @@ public class CellLocation {
         _column = column;
     }
 
+    /**
+     * @return row
+     */
     public int getRow() {
         return _row;
     }
 
+    /**
+     * @return column
+     */
     public int getColumn() {
         return _column;
     }
@@ -35,16 +44,12 @@ public class CellLocation {
      */
     @Override
     public boolean equals(Object obj) {
-        
         if (this == obj) return true;
         if (obj == null) return false;
-        if (!(obj instanceof CellLocation))return false;
+        if (!(obj instanceof CellLocation)) return false;
         
         final CellLocation other = (CellLocation) obj;
-        if (_column != other._column) return false;
-        if (_row != other._row) return false;
-
-        return true;
+        return ((_column == other._column) && (_row == other._row)); 
     }
 
     /*

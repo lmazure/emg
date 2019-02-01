@@ -1,4 +1,4 @@
-package fr.mazure.maven.emg;
+package fr.mazure.maven.emg.table;
 
 import java.io.File;
 import java.util.List;

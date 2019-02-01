@@ -7,6 +7,10 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import fr.mazure.maven.emg.table.CellLocation;
+import fr.mazure.maven.emg.table.Table;
+import fr.mazure.maven.emg.table.TableExtractor;
+
 class OdtTableExtractorTest extends OdtTableExtractor {
 
     @Test

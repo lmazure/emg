@@ -2,6 +2,8 @@ package fr.mazure.maven.emg;
 
 import java.io.File;
 
+import fr.mazure.maven.emg.table.TableExtractor;
+
 /* 
  * POI does not work
  * let's look at

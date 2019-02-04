@@ -1,7 +1,9 @@
 package fr.mazure.maven.emg.traceability;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -36,6 +38,23 @@ public class TraceabilityAnalyzer {
         List<ForwardTraceability> list = new ArrayList<ForwardTraceability>();*/
         
         final Analysis analysis = new Analysis();
+        
+        // detect duplicated source IDs
+        final Map<String, SortedSet<String>> sourceLocations = new HashMap<String, SortedSet<String>>();
+        for (SourceElement source: sources) {
+            SortedSet<String> l = sourceLocations.get(source.getId());
+            if (l == null) {
+                l = new TreeSet<String>();
+                sourceLocations.put(source.getId(), l);
+            }
+            l.add(source.getLocation());
+        }
+        for (String id: sourceLocations.keySet()) {
+            SortedSet<String> l = sourceLocations.get(id);
+            if (l.size() > 1) {
+                analysis.addError("source Id '" + id + "' is duplicated:\n- " + String.join("\n- ", l));
+            }
+        }
         
         return analysis;
     }

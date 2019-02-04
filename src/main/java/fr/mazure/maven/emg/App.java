@@ -4,12 +4,10 @@ import java.io.File;
 
 import fr.mazure.maven.emg.table.TableExtractor;
 
-/* 
- * POI does not work
- * let's look at
- * https://www.codeproject.com/Articles/38425/How-to-Read-and-Write-ODF-ODS-Files-OpenDocument-2
- * https://stackoverflow.com/questions/4962102/parse-document-structure-with-java
- * 
+/*
+ * - add comments
+ * - implement checTraceablity(List<Requirements>, List<UpwardTrace>) which return a List<DownwardTrace>)
+ *   implement both makup and HTML printing of the traceability matrix 
  */
 
 /**

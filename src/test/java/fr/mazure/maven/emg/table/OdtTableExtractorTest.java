@@ -1,4 +1,4 @@
-package fr.mazure.maven.emg;
+package fr.mazure.maven.emg.table;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import fr.mazure.maven.emg.OdtTableExtractor;
 import fr.mazure.maven.emg.table.CellLocation;
 import fr.mazure.maven.emg.table.Table;
 import fr.mazure.maven.emg.table.TableExtractor;

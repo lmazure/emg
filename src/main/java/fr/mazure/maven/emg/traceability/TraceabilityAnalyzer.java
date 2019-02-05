@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -40,22 +39,33 @@ public class TraceabilityAnalyzer {
         final Analysis analysis = new Analysis();
         
         // detect duplicated source IDs
-        final Map<String, SortedSet<String>> sourceLocations = new HashMap<String, SortedSet<String>>();
-        for (SourceElement source: sources) {
-            SortedSet<String> l = sourceLocations.get(source.getId());
+        detectDuplicatedIds(sources, "source Id", analysis);
+
+        // detect duplicated target IDs
+        final List<TargetElement> list = new ArrayList<TargetElement>();
+        for (BackwardTraceability bt: targetTraceabilities) list.add(bt.getTarget());
+        detectDuplicatedIds(list, "target Id", analysis);
+        
+
+        return analysis;
+    }
+
+    private void detectDuplicatedIds(final List<? extends Element> elements, final String elementDescription, final Analysis analysis) {
+        
+        final Map<String, SortedSet<String>> locations = new HashMap<String, SortedSet<String>>();
+        for (Element source: elements) {
+            SortedSet<String> l = locations.get(source.getId());
             if (l == null) {
                 l = new TreeSet<String>();
-                sourceLocations.put(source.getId(), l);
+                locations.put(source.getId(), l);
             }
             l.add(source.getLocation());
         }
-        for (String id: sourceLocations.keySet()) {
-            SortedSet<String> l = sourceLocations.get(id);
+        for (String id: locations.keySet()) {
+            SortedSet<String> l = locations.get(id);
             if (l.size() > 1) {
-                analysis.addError("source Id '" + id + "' is duplicated:\n- " + String.join("\n- ", l));
+                analysis.addError(elementDescription + " '" + id + "' is duplicated:\n- " + String.join("\n- ", l));
             }
         }
-        
-        return analysis;
     }
 }

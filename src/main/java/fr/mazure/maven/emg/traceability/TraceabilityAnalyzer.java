@@ -54,7 +54,7 @@ public class TraceabilityAnalyzer {
             for (String sourceId: bt.getSourceIds()) {
                 String id;
                 if (!realSourceIds.contains(sourceId)) {
-                    analysis.addError("target Id '" + bt.getTarget().getId() + "' refers a non-existing source Id'" + sourceId + "'");
+                    analysis.addError("target Id '" + bt.getTarget().getId() + "' refers a non-existing source Id: '" + sourceId + "'");
                     id = "‽ " + sourceId + " ‽";
                     if (!indexedMapOfSourceElement.containsKey(id)) {
                         final SourceElement pseudoSourceElement = new SourceElement(id, ""); 

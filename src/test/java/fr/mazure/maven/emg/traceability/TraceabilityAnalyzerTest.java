@@ -201,6 +201,30 @@ class TraceabilityAnalyzerTest {
     }
 
     @Test
+    void nonExistingSourceIdIsReportedAsError() {
+        
+        final List<SourceElement> sources = new ArrayList<SourceElement>();
+        final List<BackwardTraceability> targetTraceabilities  = new ArrayList<BackwardTraceability>();
+        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer();
+
+        sources.add(new SourceElement("sA", "location sA"));
+        targetTraceabilities.add(new BackwardTraceability(new TargetElement("tA", "location tA"), Arrays.asList("sA", "sB")));
+        final Analysis analysis = analyzer.analyze(sources, targetTraceabilities);
+        
+        assertEquals(1, analysis.getErrors().size());
+        assertEquals("target Id 'tA' refers a non-existing source Id: 'sB'", analysis.getErrors().get(0));
+        assertEquals(2, analysis.getForwardTraceability().size());
+
+        assertEquals("sA", analysis.getForwardTraceability().get(0).getSource().getId());
+        assertEquals(1, analysis.getForwardTraceability().get(0).getTargets().size());
+        assertEquals("tA", analysis.getForwardTraceability().get(0).getTargets().get(0).getId());
+
+        assertEquals("‽ sB ‽", analysis.getForwardTraceability().get(1).getSource().getId());
+        assertEquals(1, analysis.getForwardTraceability().get(1).getTargets().size());
+        assertEquals("tA", analysis.getForwardTraceability().get(1).getTargets().get(0).getId());
+}
+    
+    @Test
     void analyzeSingleTraceability() {
         
         final List<SourceElement> sources = new ArrayList<SourceElement>();
@@ -254,5 +278,56 @@ class TraceabilityAnalyzerTest {
         assertEquals(2, analysis.getForwardTraceability().get(2).getTargets().size());
         assertEquals("tC", analysis.getForwardTraceability().get(2).getTargets().get(0).getId());
         assertEquals("tE", analysis.getForwardTraceability().get(2).getTargets().get(1).getId());
+    }
+
+    @Test
+    void analyzeMultipleIncludingNonExistingSourceIdTraceability() {
+        
+        final List<SourceElement> sources = new ArrayList<SourceElement>();
+        final List<BackwardTraceability> targetTraceabilities  = new ArrayList<BackwardTraceability>();
+        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer();
+
+        sources.add(new SourceElement("sC", "location sC"));
+        sources.add(new SourceElement("sA", "location sA"));
+        sources.add(new SourceElement("sB", "location sB"));
+        targetTraceabilities.add(new BackwardTraceability(new TargetElement("tD", "location tD"), Arrays.asList("sE", "sB")));
+        targetTraceabilities.add(new BackwardTraceability(new TargetElement("tA", "location tA"), Arrays.asList("sA")));
+        targetTraceabilities.add(new BackwardTraceability(new TargetElement("tE", "location tE"), Arrays.asList("sC", "sF")));
+        targetTraceabilities.add(new BackwardTraceability(new TargetElement("tB", "location tB"), Arrays.asList("sA", "sF", "sB")));
+        targetTraceabilities.add(new BackwardTraceability(new TargetElement("tC", "location tC"), Arrays.asList("sA", "sB", "sC")));
+        final Analysis analysis = analyzer.analyze(sources, targetTraceabilities);
+        
+        assertEquals(3, analysis.getErrors().size());
+        assertEquals("target Id 'tB' refers a non-existing source Id: 'sF'", analysis.getErrors().get(0));
+        assertEquals("target Id 'tD' refers a non-existing source Id: 'sE'", analysis.getErrors().get(1));
+        assertEquals("target Id 'tE' refers a non-existing source Id: 'sF'", analysis.getErrors().get(2));
+
+        assertEquals(5, analysis.getForwardTraceability().size());
+
+        assertEquals("sA", analysis.getForwardTraceability().get(0).getSource().getId());
+        assertEquals(3, analysis.getForwardTraceability().get(0).getTargets().size());
+        assertEquals("tA", analysis.getForwardTraceability().get(0).getTargets().get(0).getId());
+        assertEquals("tB", analysis.getForwardTraceability().get(0).getTargets().get(1).getId());
+        assertEquals("tC", analysis.getForwardTraceability().get(0).getTargets().get(2).getId());
+
+        assertEquals("sB", analysis.getForwardTraceability().get(1).getSource().getId());
+        assertEquals(3, analysis.getForwardTraceability().get(1).getTargets().size());
+        assertEquals("tB", analysis.getForwardTraceability().get(1).getTargets().get(0).getId());
+        assertEquals("tC", analysis.getForwardTraceability().get(1).getTargets().get(1).getId());
+        assertEquals("tD", analysis.getForwardTraceability().get(1).getTargets().get(2).getId());
+
+        assertEquals("sC", analysis.getForwardTraceability().get(2).getSource().getId());
+        assertEquals(2, analysis.getForwardTraceability().get(2).getTargets().size());
+        assertEquals("tC", analysis.getForwardTraceability().get(2).getTargets().get(0).getId());
+        assertEquals("tE", analysis.getForwardTraceability().get(2).getTargets().get(1).getId());
+
+        assertEquals("‽ sE ‽", analysis.getForwardTraceability().get(3).getSource().getId());
+        assertEquals(1, analysis.getForwardTraceability().get(3).getTargets().size());
+        assertEquals("tD", analysis.getForwardTraceability().get(3).getTargets().get(0).getId());
+
+        assertEquals("‽ sF ‽", analysis.getForwardTraceability().get(4).getSource().getId());
+        assertEquals(2, analysis.getForwardTraceability().get(4).getTargets().size());
+        assertEquals("tB", analysis.getForwardTraceability().get(4).getTargets().get(0).getId());
+        assertEquals("tE", analysis.getForwardTraceability().get(4).getTargets().get(1).getId());
     }
 }

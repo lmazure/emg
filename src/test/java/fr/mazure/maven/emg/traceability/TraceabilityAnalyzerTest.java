@@ -166,7 +166,7 @@ class TraceabilityAnalyzerTest {
         assertEquals("source Id 'B' is duplicated:\n- location uu\n- location ww\n- location yy", analysis.getErrors().get(1));
         assertEquals("target Id 'A' is duplicated:\n- location A\n- location B\n- location E", analysis.getErrors().get(2));
         assertEquals("target Id 'B' is duplicated:\n- location C\n- location D", analysis.getErrors().get(3));
-        assertEquals("the backward tracebility of target Id 'B' contains a duplicated source Id: 'A'", analysis.getErrors().get(4));
+        assertEquals("the backward traceability of target Id 'B' contains a duplicated source Id: 'A'", analysis.getErrors().get(4));
     }
 
     @Test
@@ -197,7 +197,7 @@ class TraceabilityAnalyzerTest {
         final Analysis analysis = analyzer.analyze(sources, targetTraceabilities);
         
         assertEquals(1, analysis.getErrors().size());
-        assertEquals("the backward tracebility of target Id 'tA' contains a duplicated source Id: 'sA'", analysis.getErrors().get(0));
+        assertEquals("the backward traceability of target Id 'tA' contains a duplicated source Id: 'sA'", analysis.getErrors().get(0));
     }
 
     @Test
@@ -216,5 +216,43 @@ class TraceabilityAnalyzerTest {
         assertEquals("sA", analysis.getForwardTraceability().get(0).getSource().getId());
         assertEquals(1, analysis.getForwardTraceability().get(0).getTargets().size());
         assertEquals("tA", analysis.getForwardTraceability().get(0).getTargets().get(0).getId());
+    }
+
+    @Test
+    void analyzeMultipleTraceability() {
+        
+        final List<SourceElement> sources = new ArrayList<SourceElement>();
+        final List<BackwardTraceability> targetTraceabilities  = new ArrayList<BackwardTraceability>();
+        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer();
+
+        sources.add(new SourceElement("sC", "location sC"));
+        sources.add(new SourceElement("sB", "location sB"));
+        sources.add(new SourceElement("sA", "location sA"));
+        targetTraceabilities.add(new BackwardTraceability(new TargetElement("tD", "location tD"), Arrays.asList("sB")));
+        targetTraceabilities.add(new BackwardTraceability(new TargetElement("tA", "location tA"), Arrays.asList("sA")));
+        targetTraceabilities.add(new BackwardTraceability(new TargetElement("tE", "location tE"), Arrays.asList("sC")));
+        targetTraceabilities.add(new BackwardTraceability(new TargetElement("tB", "location tB"), Arrays.asList("sA", "sB")));
+        targetTraceabilities.add(new BackwardTraceability(new TargetElement("tC", "location tC"), Arrays.asList("sA", "sB", "sC")));
+        final Analysis analysis = analyzer.analyze(sources, targetTraceabilities);
+        
+        assertEquals(0, analysis.getErrors().size());
+        assertEquals(3, analysis.getForwardTraceability().size());
+
+        assertEquals("sA", analysis.getForwardTraceability().get(0).getSource().getId());
+        assertEquals(3, analysis.getForwardTraceability().get(0).getTargets().size());
+        assertEquals("tA", analysis.getForwardTraceability().get(0).getTargets().get(0).getId());
+        assertEquals("tB", analysis.getForwardTraceability().get(0).getTargets().get(1).getId());
+        assertEquals("tC", analysis.getForwardTraceability().get(0).getTargets().get(2).getId());
+
+        assertEquals("sB", analysis.getForwardTraceability().get(1).getSource().getId());
+        assertEquals(3, analysis.getForwardTraceability().get(1).getTargets().size());
+        assertEquals("tB", analysis.getForwardTraceability().get(1).getTargets().get(0).getId());
+        assertEquals("tC", analysis.getForwardTraceability().get(1).getTargets().get(1).getId());
+        assertEquals("tD", analysis.getForwardTraceability().get(1).getTargets().get(2).getId());
+
+        assertEquals("sC", analysis.getForwardTraceability().get(2).getSource().getId());
+        assertEquals(2, analysis.getForwardTraceability().get(2).getTargets().size());
+        assertEquals("tC", analysis.getForwardTraceability().get(2).getTargets().get(0).getId());
+        assertEquals("tE", analysis.getForwardTraceability().get(2).getTargets().get(1).getId());
     }
 }

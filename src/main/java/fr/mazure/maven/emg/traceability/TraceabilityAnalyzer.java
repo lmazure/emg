@@ -26,11 +26,11 @@ public class TraceabilityAnalyzer {
         for (BackwardTraceability bt: targetTraceabilities) list.add(bt.getTarget());
         detectDuplicatedElements(list, "target Id", analysis);
 
-        // record the real source Ids
+        // keep a record of the real source Ids
         final Set<String> realSourceIds = new HashSet<String>();
         for (SourceElement s: sources) realSourceIds.add(s.getId());
         
-        // create indexed map of sources elements (we will add pseudo source elements later on)
+        // create indexed map of source elements (we will add pseudo source elements later on)
         final Map<String, SourceElement> indexedMapOfSourceElement = new HashMap<String, SourceElement>();
         for (SourceElement source: sources) {
             if (!indexedMapOfSourceElement.containsKey(source.getId()) ) {
@@ -49,7 +49,7 @@ public class TraceabilityAnalyzer {
                 break;
             }
             
-            detectDuplicatedIds(bt.getSourceIds(), "the backward tracebility of target Id '" + bt.getTarget().getId() + "' ", analysis);
+            detectDuplicatedIds(bt.getSourceIds(), "the backward traceability of target Id '" + bt.getTarget().getId() + "'", analysis);
             
             for (String sourceId: bt.getSourceIds()) {
                 String id;
@@ -93,7 +93,7 @@ public class TraceabilityAnalyzer {
         }
     }
     
-    static private void detectDuplicatedIds(List<String> ids, final String description, final Analysis analysis) {
+    static private void detectDuplicatedIds(List<String> ids, final String listDescription, final Analysis analysis) {
 
         final Map<String, Integer> idToCountMap = new HashMap<String, Integer>();
         for (String id: ids) {
@@ -108,7 +108,7 @@ public class TraceabilityAnalyzer {
 
         for (String id: idToCountMap.keySet()) {
             if (idToCountMap.get(id) > 1) {
-                analysis.addError(description + "contains a duplicated source Id: '" + id + "'");
+                analysis.addError(listDescription + " contains a duplicated source Id: '" + id + "'");
             }
         }
         

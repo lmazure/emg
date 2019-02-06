@@ -19,12 +19,12 @@ public class TraceabilityAnalyzer {
         final Analysis analysis = new Analysis();
         
         // detect duplicated source IDs
-        detectDuplicatedIds(sources, "source Id", analysis);
+        detectDuplicatedElements(sources, "source Id", analysis);
 
         // detect duplicated target IDs
         final List<TargetElement> list = new ArrayList<TargetElement>();
         for (BackwardTraceability bt: targetTraceabilities) list.add(bt.getTarget());
-        detectDuplicatedIds(list, "target Id", analysis);
+        detectDuplicatedElements(list, "target Id", analysis);
 
         // record the real source Ids
         final Set<String> realSourceIds = new HashSet<String>();
@@ -43,25 +43,28 @@ public class TraceabilityAnalyzer {
         for (SourceElement s: sources) forwardTraceabilities.put(s, new ArrayList<TargetElement>());
         
         for (BackwardTraceability bt: targetTraceabilities) {
+
             if (bt.getSourceIds().size() == 0) {
                 analysis.addError("target Id '" + bt.getTarget().getId() + "' has no backward traceability");
-            } else {
-                for (String sourceId: bt.getSourceIds()) {
-                    // TODO detect when a target points twice toward a source
-                    String id;
-                    if (!realSourceIds.contains(sourceId)) {
-                        analysis.addError("target Id '" + bt.getTarget().getId() + "' refers a non-existing source Id'" + sourceId + "'");
-                        id = "‽ " + sourceId + " ‽";
-                        if (!indexedMapOfSourceElement.containsKey(id)) {
-                            final SourceElement pseudoSourceElement = new SourceElement(id, ""); 
-                            indexedMapOfSourceElement.put(id, pseudoSourceElement);
-                            forwardTraceabilities.put(pseudoSourceElement, new ArrayList<TargetElement>());
-                        }
-                    } else {
-                        id = sourceId;
+                break;
+            }
+            
+            detectDuplicatedIds(bt.getSourceIds(), "the backward tracebility of target Id '" + bt.getTarget().getId() + "' ", analysis);
+            
+            for (String sourceId: bt.getSourceIds()) {
+                String id;
+                if (!realSourceIds.contains(sourceId)) {
+                    analysis.addError("target Id '" + bt.getTarget().getId() + "' refers a non-existing source Id'" + sourceId + "'");
+                    id = "‽ " + sourceId + " ‽";
+                    if (!indexedMapOfSourceElement.containsKey(id)) {
+                        final SourceElement pseudoSourceElement = new SourceElement(id, ""); 
+                        indexedMapOfSourceElement.put(id, pseudoSourceElement);
+                        forwardTraceabilities.put(pseudoSourceElement, new ArrayList<TargetElement>());
                     }
-                    forwardTraceabilities.get(indexedMapOfSourceElement.get(id)).add(bt.getTarget());
+                } else {
+                    id = sourceId;
                 }
+                forwardTraceabilities.get(indexedMapOfSourceElement.get(id)).add(bt.getTarget());
             }
         }
 
@@ -70,22 +73,44 @@ public class TraceabilityAnalyzer {
         return analysis;
     }
 
-    static private void detectDuplicatedIds(final List<? extends Element> elements, final String elementDescription, final Analysis analysis) {
+    static private void detectDuplicatedElements(final List<? extends Element> elements, final String elementDescription, final Analysis analysis) {
         
-        final Map<String, SortedSet<String>> locations = new HashMap<String, SortedSet<String>>();
+        final Map<String, SortedSet<String>> idToLocationMap = new HashMap<String, SortedSet<String>>();
         for (Element element: elements) {
-            SortedSet<String> l = locations.get(element.getId());
+            SortedSet<String> l = idToLocationMap.get(element.getId());
             if (l == null) {
                 l = new TreeSet<String>();
-                locations.put(element.getId(), l);
+                idToLocationMap.put(element.getId(), l);
             }
             l.add(element.getLocation());
         }
-        for (String id: locations.keySet()) {
-            SortedSet<String> l = locations.get(id);
+
+        for (String id: idToLocationMap.keySet()) {
+            SortedSet<String> l = idToLocationMap.get(id);
             if (l.size() > 1) {
                 analysis.addError(elementDescription + " '" + id + "' is duplicated:\n- " + String.join("\n- ", l));
             }
         }
+    }
+    
+    static private void detectDuplicatedIds(List<String> ids, final String description, final Analysis analysis) {
+
+        final Map<String, Integer> idToCountMap = new HashMap<String, Integer>();
+        for (String id: ids) {
+            Integer l = idToCountMap.get(id);
+            if (l == null) {
+                l = Integer.valueOf(1);;
+                idToCountMap.put(id, l);
+            } else {
+                idToCountMap.put(id, l + 1);
+            }
+        }
+
+        for (String id: idToCountMap.keySet()) {
+            if (idToCountMap.get(id) > 1) {
+                analysis.addError(description + "contains a duplicated source Id: '" + id + "'");
+            }
+        }
+        
     }
 }

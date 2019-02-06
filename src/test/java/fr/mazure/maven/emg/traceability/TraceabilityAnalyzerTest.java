@@ -156,16 +156,17 @@ class TraceabilityAnalyzerTest {
         sources.add(new SourceElement("XXX", "location XXX"));
         targetTraceabilities.add(new BackwardTraceability(new TargetElement("A", "location E"), Arrays.asList("XXX")));
         targetTraceabilities.add(new BackwardTraceability(new TargetElement("B", "location D"), Arrays.asList("XXX")));
-        targetTraceabilities.add(new BackwardTraceability(new TargetElement("B", "location C"), Arrays.asList("XXX")));
+        targetTraceabilities.add(new BackwardTraceability(new TargetElement("B", "location C"), Arrays.asList("XXX", "A", "A")));
         targetTraceabilities.add(new BackwardTraceability(new TargetElement("A", "location B"), Arrays.asList("XXX")));
         targetTraceabilities.add(new BackwardTraceability(new TargetElement("A", "location A"), Arrays.asList("XXX")));
         final Analysis analysis = analyzer.analyze(sources, targetTraceabilities);
         
-        assertEquals(4, analysis.getErrors().size());
+        assertEquals(5, analysis.getErrors().size());
         assertEquals("source Id 'A' is duplicated:\n- location tt\n- location zz", analysis.getErrors().get(0));
         assertEquals("source Id 'B' is duplicated:\n- location uu\n- location ww\n- location yy", analysis.getErrors().get(1));
         assertEquals("target Id 'A' is duplicated:\n- location A\n- location B\n- location E", analysis.getErrors().get(2));
         assertEquals("target Id 'B' is duplicated:\n- location C\n- location D", analysis.getErrors().get(3));
+        assertEquals("the backward tracebility of target Id 'B' contains a duplicated source Id: 'A'", analysis.getErrors().get(4));
     }
 
     @Test
@@ -181,6 +182,22 @@ class TraceabilityAnalyzerTest {
         
         assertEquals(1, analysis.getErrors().size());
         assertEquals("target Id 'tA' has no backward traceability", analysis.getErrors().get(0));
+    }
+
+    @Test
+    void duplicatedBackwardTraceabilityIsReportedAsError() {
+        
+        final List<SourceElement> sources = new ArrayList<SourceElement>();
+        final List<BackwardTraceability> targetTraceabilities  = new ArrayList<BackwardTraceability>();
+        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer();
+
+        sources.add(new SourceElement("sA", "location sA"));
+        sources.add(new SourceElement("sB", "location sB"));
+        targetTraceabilities.add(new BackwardTraceability(new TargetElement("tA", "location tA"), Arrays.asList("sA", "sB", "sA")));
+        final Analysis analysis = analyzer.analyze(sources, targetTraceabilities);
+        
+        assertEquals(1, analysis.getErrors().size());
+        assertEquals("the backward tracebility of target Id 'tA' contains a duplicated source Id: 'sA'", analysis.getErrors().get(0));
     }
 
     @Test

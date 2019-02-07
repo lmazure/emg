@@ -95,21 +95,14 @@ public class TraceabilityAnalyzer {
     
     static private void detectDuplicatedIds(List<String> ids, final String listDescription, final Analysis analysis) {
 
-        final Map<String, Integer> idToCountMap = new HashMap<String, Integer>();
+        final Set<String> allIds = new HashSet<String>();
+        final Set<String> duplicateIds = new HashSet<String>();
         for (String id: ids) {
-            Integer l = idToCountMap.get(id);
-            if (l == null) {
-                l = Integer.valueOf(1);;
-                idToCountMap.put(id, l);
-            } else {
-                idToCountMap.put(id, l + 1);
-            }
+            (allIds.contains(id) ? duplicateIds : allIds).add(id);
         }
 
-        for (String id: idToCountMap.keySet()) {
-            if (idToCountMap.get(id) > 1) {
-                analysis.addError(listDescription + " contains a duplicated source Id: '" + id + "'");
-            }
+        for (String id: duplicateIds) {
+            analysis.addError(listDescription + " contains a duplicated source Id: '" + id + "'");
         }
     }
 }

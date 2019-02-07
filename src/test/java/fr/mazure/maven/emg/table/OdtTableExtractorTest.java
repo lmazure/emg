@@ -10,13 +10,13 @@ import org.junit.jupiter.api.Test;
 import fr.mazure.maven.emg.OdtTableExtractor;
 import fr.mazure.maven.emg.table.CellLocation;
 import fr.mazure.maven.emg.table.Table;
-import fr.mazure.maven.emg.table.TableExtractor;
+import fr.mazure.maven.emg.table.ITableExtractor;
 
 class OdtTableExtractorTest {
 
     @Test
     void canExtractOneTable() {
-        final TableExtractor extractor = new OdtTableExtractor();
+        final ITableExtractor extractor = new OdtTableExtractor();
         List<Table> list = extractor.extract(new File("testdata/OneTableWithOne1x1Cell.odt"));
 
         assertEquals(1, list.size());
@@ -28,7 +28,7 @@ class OdtTableExtractorTest {
 
     @Test
     void canExtractThreeTable() {
-        final TableExtractor extractor = new OdtTableExtractor();
+        final ITableExtractor extractor = new OdtTableExtractor();
         List<Table> list = extractor.extract(new File("testdata/ThreeTables2x3_4x1_1x5.odt"));
 
         assertEquals(3, list.size());
@@ -63,7 +63,7 @@ class OdtTableExtractorTest {
 
     @Test
     void ignoreTableInTable() {
-        final TableExtractor extractor = new OdtTableExtractor();
+        final ITableExtractor extractor = new OdtTableExtractor();
         List<Table> list = extractor.extract(new File("testdata/TableInTable.odt"));
 
         assertEquals(1, list.size());
@@ -78,7 +78,7 @@ class OdtTableExtractorTest {
 
     @Test
     void manageMergedCells() {
-        final TableExtractor extractor = new OdtTableExtractor();
+        final ITableExtractor extractor = new OdtTableExtractor();
         List<Table> list = extractor.extract(new File("testdata/TablesWithMergedCells.odt"));
 
         assertEquals(3, list.size());

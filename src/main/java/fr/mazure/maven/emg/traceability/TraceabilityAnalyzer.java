@@ -93,7 +93,7 @@ public class TraceabilityAnalyzer {
         }
     }
     
-    static private void detectDuplicatedIds(List<String> ids, final String listDescription, final Analysis analysis) {
+    static private void detectDuplicatedIds(final List<String> ids, final String listDescription, final Analysis analysis) {
 
         final Set<String> allIds = new HashSet<String>();
         final Set<String> duplicateIds = new HashSet<String>();

@@ -19,9 +19,9 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import fr.mazure.maven.emg.table.Table;
-import fr.mazure.maven.emg.table.TableExtractor;
+import fr.mazure.maven.emg.table.ITableExtractor;
 
-public class OdtTableExtractor implements TableExtractor {
+public class OdtTableExtractor implements ITableExtractor {
 
     public List<Table> extract(File file) {
 

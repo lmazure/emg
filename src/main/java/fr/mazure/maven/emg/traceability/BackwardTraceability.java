@@ -1,5 +1,6 @@
 package fr.mazure.maven.emg.traceability;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class BackwardTraceability {
      */
     public BackwardTraceability(final TargetElement target, final List<String> sourceIds) {
         _target = target;
-        _sourceIds = sourceIds;
+        _sourceIds = new ArrayList<String>(sourceIds);
         Collections.sort(_sourceIds);
     }
 

@@ -111,6 +111,5 @@ public class TraceabilityAnalyzer {
                 analysis.addError(listDescription + " contains a duplicated source Id: '" + id + "'");
             }
         }
-        
     }
 }

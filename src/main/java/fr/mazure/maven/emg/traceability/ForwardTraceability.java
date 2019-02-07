@@ -1,5 +1,6 @@
 package fr.mazure.maven.emg.traceability;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class ForwardTraceability {
      */
     public ForwardTraceability(final SourceElement source, final List<TargetElement> targets) {
         _source = source;
-        _targets = targets;
+        _targets = new ArrayList<TargetElement>(targets);
         Collections.sort(_targets, (a, b) -> a.getId().compareTo(b.getId()));
     }
 

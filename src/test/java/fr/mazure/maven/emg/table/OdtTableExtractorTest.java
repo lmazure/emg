@@ -12,7 +12,7 @@ import fr.mazure.maven.emg.table.CellLocation;
 import fr.mazure.maven.emg.table.Table;
 import fr.mazure.maven.emg.table.TableExtractor;
 
-class OdtTableExtractorTest extends OdtTableExtractor {
+class OdtTableExtractorTest {
 
     @Test
     void canExtractOneTable() {

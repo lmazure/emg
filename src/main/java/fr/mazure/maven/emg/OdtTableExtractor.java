@@ -23,7 +23,7 @@ import fr.mazure.maven.emg.table.ITableExtractor;
 
 public class OdtTableExtractor implements ITableExtractor {
 
-    public List<Table> extract(File file) {
+    public List<Table> extract(final File file) {
 
         final Document document = extractXmlContent(file);
         

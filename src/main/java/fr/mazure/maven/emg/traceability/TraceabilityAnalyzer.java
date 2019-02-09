@@ -18,13 +18,13 @@ public class TraceabilityAnalyzer {
         
         final Analysis analysis = new Analysis();
         
-        // detect duplicated source IDs
-        detectDuplicatedElements(sources, "source Id", analysis);
+        // detect duplicated or empty source IDs
+        detectDuplicatedOrEmptyElements(sources, "source Id", analysis);
 
-        // detect duplicated target IDs
+        // detect duplicated or empty target IDs
         final List<TargetElement> list = new ArrayList<TargetElement>();
         for (BackwardTraceability bt: targetTraceabilities) list.add(bt.getTarget());
-        detectDuplicatedElements(list, "target Id", analysis);
+        detectDuplicatedOrEmptyElements(list, "target Id", analysis);
 
         // keep a record of the real source Ids
         final Set<String> realSourceIds = new HashSet<String>();
@@ -75,16 +75,20 @@ public class TraceabilityAnalyzer {
         return analysis;
     }
 
-    static private void detectDuplicatedElements(final List<? extends Element> elements, final String elementDescription, final Analysis analysis) {
+    static private void detectDuplicatedOrEmptyElements(final List<? extends Element> elements, final String elementDescription, final Analysis analysis) {
         
         final Map<String, SortedSet<String>> idToLocationMap = new HashMap<String, SortedSet<String>>();
         for (Element element: elements) {
-            SortedSet<String> l = idToLocationMap.get(element.getId());
-            if (l == null) {
-                l = new TreeSet<String>();
-                idToLocationMap.put(element.getId(), l);
+            if (element.getId().isEmpty()) {
+                analysis.addError("empty " + elementDescription + " at " + element.getLocation());                
+            } else {
+                SortedSet<String> l = idToLocationMap.get(element.getId());
+                if (l == null) {
+                    l = new TreeSet<String>();
+                    idToLocationMap.put(element.getId(), l);
+                }
+                l.add(element.getLocation());                
             }
-            l.add(element.getLocation());
         }
 
         for (String id: idToLocationMap.keySet()) {

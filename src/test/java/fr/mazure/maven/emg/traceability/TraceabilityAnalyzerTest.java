@@ -24,6 +24,22 @@ class TraceabilityAnalyzerTest {
     }
 
     @Test
+    void emptySourceIdIsReportedAsError() {
+        
+        final List<SourceElement> sources = new ArrayList<SourceElement>();
+        final List<BackwardTraceability> targetTraceabilities  = new ArrayList<BackwardTraceability>();
+        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer();
+        
+        sources.add(new SourceElement("A", "location A"));
+        sources.add(new SourceElement("B", "location B"));
+        sources.add(new SourceElement("", "location C"));
+        final Analysis analysis = analyzer.analyze(sources, targetTraceabilities);
+
+        assertEquals(1, analysis.getErrors().size());
+        assertEquals("empty source Id at location C", analysis.getErrors().get(0));
+    }
+
+    @Test
     void duplicatedSourceIdIsReportedAsError() {
         
         final List<SourceElement> sources = new ArrayList<SourceElement>();
@@ -81,6 +97,24 @@ class TraceabilityAnalyzerTest {
         assertEquals("source Id 'B' is duplicated:\n- location uu\n- location ww\n- location yy", analysis.getErrors().get(1));
     }
 
+    @Test
+    void emptyTargetIdIsReportedAsError() {
+        
+        final List<SourceElement> sources = new ArrayList<SourceElement>();
+        final List<BackwardTraceability> targetTraceabilities  = new ArrayList<BackwardTraceability>();
+        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer();
+
+        sources.add(new SourceElement("XXX", "location XXX"));
+        targetTraceabilities.add(new BackwardTraceability(new TargetElement("A", "location A"), Arrays.asList("XXX")));
+        targetTraceabilities.add(new BackwardTraceability(new TargetElement("B", "location D"), Arrays.asList("XXX")));
+        targetTraceabilities.add(new BackwardTraceability(new TargetElement("", "location C"), Arrays.asList("XXX")));
+        targetTraceabilities.add(new BackwardTraceability(new TargetElement("D", "location D"), Arrays.asList("XXX")));
+        final Analysis analysis = analyzer.analyze(sources, targetTraceabilities);
+        
+        assertEquals(1, analysis.getErrors().size());
+        assertEquals("empty target Id at location C", analysis.getErrors().get(0));
+    }
+    
     @Test
     void duplicatedTargetIdIsReportedAsError() {
         

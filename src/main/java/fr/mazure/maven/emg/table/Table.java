@@ -22,6 +22,8 @@ public class Table {
 
         if (column < 0) throw new IllegalArgumentException("column negative (" + column + ")");
         if (row < 0) throw new IllegalArgumentException("row negative (" + row + ")");
+        if (column >= _numberOfColumns) throw new IllegalArgumentException("column too large (" + column + ")");
+        if (row >= _numberOfRows) throw new IllegalArgumentException("row too large (" + column + ")");
         if (content == null) throw new IllegalArgumentException("content is null");
 
         setCell(column, row, content);
@@ -60,6 +62,11 @@ public class Table {
     
     private void setCell(final int column, final int row, final Object value) {
 
+        if (column < 0) throw new IllegalArgumentException("column negative (" + column + ")");
+        if (row < 0) throw new IllegalArgumentException("row negative (" + row + ")");
+        if (column >= _numberOfColumns) throw new IllegalArgumentException("column too large (" + column + ")");
+        if (row >= _numberOfRows) throw new IllegalArgumentException("row too large (" + column + ")");
+
         if (_content[column][row] != null) throw new IllegalArgumentException("cell (" + column + "," + row + ") has already been initialized");
             
         _content[column][row] = value;
@@ -81,6 +88,8 @@ public class Table {
 
         if (column < 0) throw new IllegalArgumentException("column negative (" + column + ")");
         if (row < 0) throw new IllegalArgumentException("row negative (" + row + ")");
+        if (column >= _numberOfColumns) throw new IllegalArgumentException("column too large (" + column + ")");
+        if (row >= _numberOfRows) throw new IllegalArgumentException("row too large (" + column + ")");
 
         if (_content[column][row] == null) throw new IllegalStateException("cell (" + column + "," + row + ") has not been initialized");
         if (_content[column][row] instanceof CellLocation) throw new IllegalStateException("cell (" + column + "," + row + ") is merged");
@@ -97,6 +106,8 @@ public class Table {
 
         if (column < 0) throw new IllegalArgumentException("column negative (" + column + ")");
         if (row < 0) throw new IllegalArgumentException("row negative (" + row + ")");
+        if (column >= _numberOfColumns) throw new IllegalArgumentException("column too large (" + column + ")");
+        if (row >= _numberOfRows) throw new IllegalArgumentException("row too large (" + column + ")");
 
         if (_content[column][row] == null) throw new IllegalStateException("cell (" + column + "," + row + ") has not been initialized");
         if (_content[column][row] instanceof String) throw new IllegalStateException("cell (" + column + "," + row + ") is not merged");
@@ -113,6 +124,8 @@ public class Table {
 
         if (column < 0) throw new IllegalArgumentException("column negative (" + column + ")");
         if (row < 0) throw new IllegalArgumentException("row negative (" + row + ")");
+        if (column >= _numberOfColumns) throw new IllegalArgumentException("column too large (" + column + ")");
+        if (row >= _numberOfRows) throw new IllegalArgumentException("row too large (" + column + ")");
 
         if (_content[column][row] == null) throw new IllegalStateException("cell (" + column + "," + row + ") has not been initialized");
         

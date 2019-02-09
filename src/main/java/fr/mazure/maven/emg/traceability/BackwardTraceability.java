@@ -29,7 +29,7 @@ public class BackwardTraceability {
     /**
      * @return the sorted sourceIds
      */
-    public List<String> getSourceIds() {
+    public List<String> getSortedSourceIds() {
         return _sourceIds;
     }
 }

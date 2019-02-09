@@ -216,12 +216,12 @@ class TraceabilityAnalyzerTest {
         assertEquals(2, analysis.getForwardTraceability().size());
 
         assertEquals("sA", analysis.getForwardTraceability().get(0).getSource().getId());
-        assertEquals(1, analysis.getForwardTraceability().get(0).getTargets().size());
-        assertEquals("tA", analysis.getForwardTraceability().get(0).getTargets().get(0).getId());
+        assertEquals(1, analysis.getForwardTraceability().get(0).getSortedTargets().size());
+        assertEquals("tA", analysis.getForwardTraceability().get(0).getSortedTargets().get(0).getId());
 
         assertEquals("‽ sB ‽", analysis.getForwardTraceability().get(1).getSource().getId());
-        assertEquals(1, analysis.getForwardTraceability().get(1).getTargets().size());
-        assertEquals("tA", analysis.getForwardTraceability().get(1).getTargets().get(0).getId());
+        assertEquals(1, analysis.getForwardTraceability().get(1).getSortedTargets().size());
+        assertEquals("tA", analysis.getForwardTraceability().get(1).getSortedTargets().get(0).getId());
 }
     
     @Test
@@ -238,8 +238,8 @@ class TraceabilityAnalyzerTest {
         assertEquals(0, analysis.getErrors().size());
         assertEquals(1, analysis.getForwardTraceability().size());
         assertEquals("sA", analysis.getForwardTraceability().get(0).getSource().getId());
-        assertEquals(1, analysis.getForwardTraceability().get(0).getTargets().size());
-        assertEquals("tA", analysis.getForwardTraceability().get(0).getTargets().get(0).getId());
+        assertEquals(1, analysis.getForwardTraceability().get(0).getSortedTargets().size());
+        assertEquals("tA", analysis.getForwardTraceability().get(0).getSortedTargets().get(0).getId());
     }
 
     @Test
@@ -263,21 +263,21 @@ class TraceabilityAnalyzerTest {
         assertEquals(3, analysis.getForwardTraceability().size());
 
         assertEquals("sA", analysis.getForwardTraceability().get(0).getSource().getId());
-        assertEquals(3, analysis.getForwardTraceability().get(0).getTargets().size());
-        assertEquals("tA", analysis.getForwardTraceability().get(0).getTargets().get(0).getId());
-        assertEquals("tB", analysis.getForwardTraceability().get(0).getTargets().get(1).getId());
-        assertEquals("tC", analysis.getForwardTraceability().get(0).getTargets().get(2).getId());
+        assertEquals(3, analysis.getForwardTraceability().get(0).getSortedTargets().size());
+        assertEquals("tA", analysis.getForwardTraceability().get(0).getSortedTargets().get(0).getId());
+        assertEquals("tB", analysis.getForwardTraceability().get(0).getSortedTargets().get(1).getId());
+        assertEquals("tC", analysis.getForwardTraceability().get(0).getSortedTargets().get(2).getId());
 
         assertEquals("sB", analysis.getForwardTraceability().get(1).getSource().getId());
-        assertEquals(3, analysis.getForwardTraceability().get(1).getTargets().size());
-        assertEquals("tB", analysis.getForwardTraceability().get(1).getTargets().get(0).getId());
-        assertEquals("tC", analysis.getForwardTraceability().get(1).getTargets().get(1).getId());
-        assertEquals("tD", analysis.getForwardTraceability().get(1).getTargets().get(2).getId());
+        assertEquals(3, analysis.getForwardTraceability().get(1).getSortedTargets().size());
+        assertEquals("tB", analysis.getForwardTraceability().get(1).getSortedTargets().get(0).getId());
+        assertEquals("tC", analysis.getForwardTraceability().get(1).getSortedTargets().get(1).getId());
+        assertEquals("tD", analysis.getForwardTraceability().get(1).getSortedTargets().get(2).getId());
 
         assertEquals("sC", analysis.getForwardTraceability().get(2).getSource().getId());
-        assertEquals(2, analysis.getForwardTraceability().get(2).getTargets().size());
-        assertEquals("tC", analysis.getForwardTraceability().get(2).getTargets().get(0).getId());
-        assertEquals("tE", analysis.getForwardTraceability().get(2).getTargets().get(1).getId());
+        assertEquals(2, analysis.getForwardTraceability().get(2).getSortedTargets().size());
+        assertEquals("tC", analysis.getForwardTraceability().get(2).getSortedTargets().get(0).getId());
+        assertEquals("tE", analysis.getForwardTraceability().get(2).getSortedTargets().get(1).getId());
     }
 
     @Test
@@ -305,29 +305,29 @@ class TraceabilityAnalyzerTest {
         assertEquals(5, analysis.getForwardTraceability().size());
 
         assertEquals("sA", analysis.getForwardTraceability().get(0).getSource().getId());
-        assertEquals(3, analysis.getForwardTraceability().get(0).getTargets().size());
-        assertEquals("tA", analysis.getForwardTraceability().get(0).getTargets().get(0).getId());
-        assertEquals("tB", analysis.getForwardTraceability().get(0).getTargets().get(1).getId());
-        assertEquals("tC", analysis.getForwardTraceability().get(0).getTargets().get(2).getId());
+        assertEquals(3, analysis.getForwardTraceability().get(0).getSortedTargets().size());
+        assertEquals("tA", analysis.getForwardTraceability().get(0).getSortedTargets().get(0).getId());
+        assertEquals("tB", analysis.getForwardTraceability().get(0).getSortedTargets().get(1).getId());
+        assertEquals("tC", analysis.getForwardTraceability().get(0).getSortedTargets().get(2).getId());
 
         assertEquals("sB", analysis.getForwardTraceability().get(1).getSource().getId());
-        assertEquals(3, analysis.getForwardTraceability().get(1).getTargets().size());
-        assertEquals("tB", analysis.getForwardTraceability().get(1).getTargets().get(0).getId());
-        assertEquals("tC", analysis.getForwardTraceability().get(1).getTargets().get(1).getId());
-        assertEquals("tD", analysis.getForwardTraceability().get(1).getTargets().get(2).getId());
+        assertEquals(3, analysis.getForwardTraceability().get(1).getSortedTargets().size());
+        assertEquals("tB", analysis.getForwardTraceability().get(1).getSortedTargets().get(0).getId());
+        assertEquals("tC", analysis.getForwardTraceability().get(1).getSortedTargets().get(1).getId());
+        assertEquals("tD", analysis.getForwardTraceability().get(1).getSortedTargets().get(2).getId());
 
         assertEquals("sC", analysis.getForwardTraceability().get(2).getSource().getId());
-        assertEquals(2, analysis.getForwardTraceability().get(2).getTargets().size());
-        assertEquals("tC", analysis.getForwardTraceability().get(2).getTargets().get(0).getId());
-        assertEquals("tE", analysis.getForwardTraceability().get(2).getTargets().get(1).getId());
+        assertEquals(2, analysis.getForwardTraceability().get(2).getSortedTargets().size());
+        assertEquals("tC", analysis.getForwardTraceability().get(2).getSortedTargets().get(0).getId());
+        assertEquals("tE", analysis.getForwardTraceability().get(2).getSortedTargets().get(1).getId());
 
         assertEquals("‽ sE ‽", analysis.getForwardTraceability().get(3).getSource().getId());
-        assertEquals(1, analysis.getForwardTraceability().get(3).getTargets().size());
-        assertEquals("tD", analysis.getForwardTraceability().get(3).getTargets().get(0).getId());
+        assertEquals(1, analysis.getForwardTraceability().get(3).getSortedTargets().size());
+        assertEquals("tD", analysis.getForwardTraceability().get(3).getSortedTargets().get(0).getId());
 
         assertEquals("‽ sF ‽", analysis.getForwardTraceability().get(4).getSource().getId());
-        assertEquals(2, analysis.getForwardTraceability().get(4).getTargets().size());
-        assertEquals("tB", analysis.getForwardTraceability().get(4).getTargets().get(0).getId());
-        assertEquals("tE", analysis.getForwardTraceability().get(4).getTargets().get(1).getId());
+        assertEquals(2, analysis.getForwardTraceability().get(4).getSortedTargets().size());
+        assertEquals("tB", analysis.getForwardTraceability().get(4).getSortedTargets().get(0).getId());
+        assertEquals("tE", analysis.getForwardTraceability().get(4).getSortedTargets().get(1).getId());
     }
 }

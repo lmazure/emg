@@ -22,11 +22,11 @@ class ForwardTraceabilityTest {
         final ForwardTraceability trace = new ForwardTraceability(source, targets);
 
         assertEquals("myId", trace.getSource().getId());
-        assertEquals(4, trace.getTargets().size());
-        assertEquals("target A", trace.getTargets().get(0).getId());
-        assertEquals("target B", trace.getTargets().get(1).getId());
-        assertEquals("target C", trace.getTargets().get(2).getId());
-        assertEquals("target D", trace.getTargets().get(3).getId());
+        assertEquals(4, trace.getSortedTargets().size());
+        assertEquals("target A", trace.getSortedTargets().get(0).getId());
+        assertEquals("target B", trace.getSortedTargets().get(1).getId());
+        assertEquals("target C", trace.getSortedTargets().get(2).getId());
+        assertEquals("target D", trace.getSortedTargets().get(3).getId());
         
         // check that the initial list has not been modified
         assertEquals(4, targets.size());

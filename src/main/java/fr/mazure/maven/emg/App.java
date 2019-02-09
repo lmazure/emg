@@ -44,6 +44,7 @@ public class App
         sources.add(new SourceElement("sC", "location sC"));
         sources.add(new SourceElement("sA", "location sA"));
         sources.add(new SourceElement("sB", "location sB"));
+        sources.add(new SourceElement("sB", "location <a>&<b>"));
         targetTraceabilities.add(new BackwardTraceability(new TargetElement("tD", "location tD"), Arrays.asList("sE", "sB")));
         targetTraceabilities.add(new BackwardTraceability(new TargetElement("tA", "location tA"), Arrays.asList("sA")));
         targetTraceabilities.add(new BackwardTraceability(new TargetElement("tE", "location tE"), Arrays.asList("sC", "sF")));

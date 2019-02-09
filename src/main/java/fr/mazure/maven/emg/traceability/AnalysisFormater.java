@@ -27,7 +27,7 @@ public class AnalysisFormater {
                 for (ForwardTraceability trace: analysis.getForwardTraceability()) {
                     p.print("<tr><td style='border: 1px solid black;'>" + toHtml(trace.getSource().getId()) + "</td><td style='border: 1px solid black;'>");
                     boolean first = true;
-                    for (TargetElement elem: trace.getTargets()) {
+                    for (TargetElement elem: trace.getSortedTargets()) {
                         if (!first) {
                             p.print(", ");
                         }
@@ -42,7 +42,7 @@ public class AnalysisFormater {
                 for (ForwardTraceability trace: analysis.getForwardTraceability()) {
                     p.print("|" + trace.getSource().getId() + "|");
                     boolean first = true;
-                    for (TargetElement elem: trace.getTargets()) {
+                    for (TargetElement elem: trace.getSortedTargets()) {
                         if (!first) {
                             p.print(", ");
                         }

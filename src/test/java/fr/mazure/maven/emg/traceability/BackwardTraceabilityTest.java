@@ -16,11 +16,11 @@ class BackwardTraceabilityTest {
         final BackwardTraceability trace = new BackwardTraceability(target, sourceIds);
 
         assertEquals("myId", trace.getTarget().getId());
-        assertEquals(4, trace.getSourceIds().size());
-        assertEquals("A", trace.getSourceIds().get(0));
-        assertEquals("B", trace.getSourceIds().get(1));
-        assertEquals("C", trace.getSourceIds().get(2));
-        assertEquals("D", trace.getSourceIds().get(3));
+        assertEquals(4, trace.getSortedSourceIds().size());
+        assertEquals("A", trace.getSortedSourceIds().get(0));
+        assertEquals("B", trace.getSortedSourceIds().get(1));
+        assertEquals("C", trace.getSortedSourceIds().get(2));
+        assertEquals("D", trace.getSortedSourceIds().get(3));
         
         // check that the initial list has not been modified
         assertEquals(4, sourceIds.size());

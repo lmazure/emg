@@ -29,7 +29,7 @@ public class ForwardTraceability {
     /**
      * @return the targets
      */
-    public List<TargetElement> getTargets() {
+    public List<TargetElement> getSortedTargets() {
         return _targets;
     }
 }

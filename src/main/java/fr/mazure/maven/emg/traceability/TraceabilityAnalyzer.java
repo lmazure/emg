@@ -44,14 +44,14 @@ public class TraceabilityAnalyzer {
         
         for (BackwardTraceability bt: targetTraceabilities) {
 
-            if (bt.getSourceIds().size() == 0) {
+            if (bt.getSortedSourceIds().size() == 0) {
                 analysis.addError("target Id '" + bt.getTarget().getId() + "' has no backward traceability");
                 break;
             }
             
-            detectDuplicatedIds(bt.getSourceIds(), "the backward traceability of target Id '" + bt.getTarget().getId() + "'", analysis);
+            detectDuplicatedIds(bt.getSortedSourceIds(), "the backward traceability of target Id '" + bt.getTarget().getId() + "'", analysis);
             
-            for (String sourceId: bt.getSourceIds()) {
+            for (String sourceId: bt.getSortedSourceIds()) {
                 String id;
                 if (!realSourceIds.contains(sourceId)) {
                     analysis.addError("target Id '" + bt.getTarget().getId() + "' refers a non-existing source Id: '" + sourceId + "'");
@@ -68,7 +68,9 @@ public class TraceabilityAnalyzer {
             }
         }
 
-        for (SourceElement s: forwardTraceabilities.keySet()) analysis.addForwardTraceability(new ForwardTraceability(s, forwardTraceabilities.get(s)));
+        for (SourceElement s: forwardTraceabilities.keySet()) {
+            analysis.addForwardTraceability(new ForwardTraceability(s, forwardTraceabilities.get(s)));
+        }
         
         return analysis;
     }

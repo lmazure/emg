@@ -19,11 +19,10 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import fr.mazure.maven.emg.table.Table;
-import fr.mazure.maven.emg.table.ITableExtractor;
 
-public class OdtTableExtractor implements ITableExtractor {
+public class OdtTableExtractor {
 
-    public List<Table> extract(final File file) {
+    static public List<Table> extract(final File file) {
 
         final Document document = extractXmlContent(file);
         

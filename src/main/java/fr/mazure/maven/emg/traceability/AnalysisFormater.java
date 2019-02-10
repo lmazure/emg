@@ -4,15 +4,20 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 
 public class AnalysisFormater {
 
     public void format(final OutputStream stream, final Analysis analysis) throws IOException {
         
         try (final BufferedOutputStream s = new BufferedOutputStream(stream);
-             final PrintStream p = new PrintStream(s)) {
-            p.println("<!DOCTYPE html>");            
+            final PrintStream p = new PrintStream(s, false, StandardCharsets.UTF_8)) {
+            p.println("<!DOCTYPE html>");
             p.println("<html>");
+            p.println("<head>");
+            p.println("<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
+            p.println("</head>");
+            p.println("<body>");
             if (analysis.getErrors().size() > 0) {
                 p.println("<h1>Errors</h1>");                            
                 p.println("<table style='border-collapse: collapse;'>");
@@ -40,19 +45,20 @@ public class AnalysisFormater {
                 p.println("<h1>Traceability as markup</h1>");                            
                 p.println("<pre>");                                            
                 for (ForwardTraceability trace: analysis.getForwardTraceability()) {
-                    p.print("|" + trace.getSource().getId() + "|");
+                    p.print("|" + toHtml(trace.getSource().getId()) + "|");
                     boolean first = true;
                     for (TargetElement elem: trace.getSortedTargets()) {
                         if (!first) {
                             p.print(", ");
                         }
-                        p.print(elem.getId());
+                        p.print(toHtml(elem.getId()));
                         first = false;
                     }
                     p.println("|</br>");
                 }
                 p.println("</pre>");                                            
             }
+            p.println("</body>");
             p.println("</html>");            
         }
     }

@@ -11,7 +11,13 @@ import java.util.TreeSet;
 
 public class TraceabilityAnalyzer {
 
-    public TraceabilityAnalyzer() {
+    final private String _sourceName;
+    final private String _targetName;
+
+    public TraceabilityAnalyzer(final String sourceName, final String targetName) {
+        
+        _sourceName = sourceName;
+        _targetName = targetName;
     }
 
     public Analysis analyze(final List<SourceElement> sources, final List<BackwardTraceability> targetTraceabilities) {
@@ -19,12 +25,12 @@ public class TraceabilityAnalyzer {
         final Analysis analysis = new Analysis();
         
         // detect duplicated or empty source IDs
-        detectDuplicatedOrEmptyElements(sources, "source Id", analysis);
+        detectDuplicatedOrEmptyElements(sources, _sourceName + " Id", analysis);
 
         // detect duplicated or empty target IDs
         final List<TargetElement> list = new ArrayList<TargetElement>();
         for (BackwardTraceability bt: targetTraceabilities) list.add(bt.getTarget());
-        detectDuplicatedOrEmptyElements(list, "target Id", analysis);
+        detectDuplicatedOrEmptyElements(list, _targetName + " Id", analysis);
 
         // keep a record of the real source Ids
         final Set<String> realSourceIds = new HashSet<String>();
@@ -45,16 +51,16 @@ public class TraceabilityAnalyzer {
         for (BackwardTraceability bt: targetTraceabilities) {
 
             if (bt.getSortedSourceIds().size() == 0) {
-                analysis.addError("target Id '" + bt.getTarget().getId() + "' has no backward traceability");
+                analysis.addError(_targetName + " Id '" + bt.getTarget().getId() + "' has no backward traceability");
                 break;
             }
             
-            detectDuplicatedIds(bt.getSortedSourceIds(), "the backward traceability of target Id '" + bt.getTarget().getId() + "'", analysis);
+            detectDuplicatedIds(bt.getSortedSourceIds(), "the backward traceability of " + _targetName + " Id '" + bt.getTarget().getId() + "'", analysis);
             
             for (String sourceId: bt.getSortedSourceIds()) {
                 String id;
                 if (!realSourceIds.contains(sourceId)) {
-                    analysis.addError("target Id '" + bt.getTarget().getId() + "' refers a non-existing source Id: '" + sourceId + "'");
+                    analysis.addError(_targetName + " Id '" + bt.getTarget().getId() + "' refers a non-existing " + _sourceName + " Id: '" + sourceId + "'");
                     id = "‽ " + sourceId + " ‽";
                     if (!indexedMapOfSourceElement.containsKey(id)) {
                         final SourceElement pseudoSourceElement = new SourceElement(id, ""); 
@@ -92,14 +98,14 @@ public class TraceabilityAnalyzer {
         }
 
         for (String id: idToLocationMap.keySet()) {
-            SortedSet<String> l = idToLocationMap.get(id);
+            final SortedSet<String> l = idToLocationMap.get(id);
             if (l.size() > 1) {
                 analysis.addError(elementDescription + " '" + id + "' is duplicated:\n- " + String.join("\n- ", l));
             }
         }
     }
     
-    static private void detectDuplicatedIds(final List<String> ids, final String listDescription, final Analysis analysis) {
+    private void detectDuplicatedIds(final List<String> ids, final String listDescription, final Analysis analysis) {
 
         final Set<String> allIds = new HashSet<String>();
         final Set<String> duplicateIds = new HashSet<String>();
@@ -108,7 +114,7 @@ public class TraceabilityAnalyzer {
         }
 
         for (String id: duplicateIds) {
-            analysis.addError(listDescription + " contains a duplicated source Id: '" + id + "'");
+            analysis.addError(listDescription + " contains a duplicated " + _sourceName + " Id: '" + id + "'");
         }
     }
 }

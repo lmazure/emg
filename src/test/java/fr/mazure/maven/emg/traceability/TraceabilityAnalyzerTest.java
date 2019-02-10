@@ -15,7 +15,7 @@ class TraceabilityAnalyzerTest {
         
         final List<SourceElement> sources = new ArrayList<SourceElement>();
         final List<BackwardTraceability> targetTraceabilities  = new ArrayList<BackwardTraceability>();
-        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer();
+        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer("source", "target");
         
         final Analysis analysis = analyzer.analyze(sources, targetTraceabilities);
         
@@ -28,7 +28,7 @@ class TraceabilityAnalyzerTest {
         
         final List<SourceElement> sources = new ArrayList<SourceElement>();
         final List<BackwardTraceability> targetTraceabilities  = new ArrayList<BackwardTraceability>();
-        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer();
+        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer("source", "target");
         
         sources.add(new SourceElement("A", "location A"));
         sources.add(new SourceElement("B", "location B"));
@@ -44,7 +44,7 @@ class TraceabilityAnalyzerTest {
         
         final List<SourceElement> sources = new ArrayList<SourceElement>();
         final List<BackwardTraceability> targetTraceabilities  = new ArrayList<BackwardTraceability>();
-        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer();
+        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer("source", "target");
         
         sources.add(new SourceElement("A", "location A"));
         sources.add(new SourceElement("B", "location B"));
@@ -60,7 +60,7 @@ class TraceabilityAnalyzerTest {
         
         final List<SourceElement> sources = new ArrayList<SourceElement>();
         final List<BackwardTraceability> targetTraceabilities  = new ArrayList<BackwardTraceability>();
-        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer();
+        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer("source", "target");
         
         sources.add(new SourceElement("A", "location zz"));
         sources.add(new SourceElement("B", "location yy"));
@@ -80,7 +80,7 @@ class TraceabilityAnalyzerTest {
         
         final List<SourceElement> sources = new ArrayList<SourceElement>();
         final List<BackwardTraceability> targetTraceabilities  = new ArrayList<BackwardTraceability>();
-        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer();
+        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer("source", "target");
         
         sources.add(new SourceElement("A", "location zz"));
         sources.add(new SourceElement("B", "location yy"));
@@ -102,7 +102,7 @@ class TraceabilityAnalyzerTest {
         
         final List<SourceElement> sources = new ArrayList<SourceElement>();
         final List<BackwardTraceability> targetTraceabilities  = new ArrayList<BackwardTraceability>();
-        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer();
+        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer("source", "target");
 
         sources.add(new SourceElement("XXX", "location XXX"));
         targetTraceabilities.add(new BackwardTraceability(new TargetElement("A", "location A"), Arrays.asList("XXX")));
@@ -120,7 +120,7 @@ class TraceabilityAnalyzerTest {
         
         final List<SourceElement> sources = new ArrayList<SourceElement>();
         final List<BackwardTraceability> targetTraceabilities  = new ArrayList<BackwardTraceability>();
-        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer();
+        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer("source", "target");
 
         sources.add(new SourceElement("XXX", "location XXX"));
         targetTraceabilities.add(new BackwardTraceability(new TargetElement("A", "location A"), Arrays.asList("XXX")));
@@ -138,7 +138,7 @@ class TraceabilityAnalyzerTest {
         
         final List<SourceElement> sources = new ArrayList<SourceElement>();
         final List<BackwardTraceability> targetTraceabilities  = new ArrayList<BackwardTraceability>();
-        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer();
+        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer("source", "target");
 
         sources.add(new SourceElement("XXX", "location XXX"));
         targetTraceabilities.add(new BackwardTraceability(new TargetElement("A", "location E"), Arrays.asList("XXX")));
@@ -158,7 +158,7 @@ class TraceabilityAnalyzerTest {
         
         final List<SourceElement> sources = new ArrayList<SourceElement>();
         final List<BackwardTraceability> targetTraceabilities  = new ArrayList<BackwardTraceability>();
-        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer();
+        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer("source", "target");
 
         sources.add(new SourceElement("XXX", "location XXX"));
         targetTraceabilities.add(new BackwardTraceability(new TargetElement("A", "location E"), Arrays.asList("XXX")));
@@ -178,7 +178,7 @@ class TraceabilityAnalyzerTest {
         
         final List<SourceElement> sources = new ArrayList<SourceElement>();
         final List<BackwardTraceability> targetTraceabilities  = new ArrayList<BackwardTraceability>();
-        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer();
+        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer("source", "target");
 
         sources.add(new SourceElement("A", "location zz"));
         sources.add(new SourceElement("B", "location yy"));
@@ -208,7 +208,7 @@ class TraceabilityAnalyzerTest {
         
         final List<SourceElement> sources = new ArrayList<SourceElement>();
         final List<BackwardTraceability> targetTraceabilities  = new ArrayList<BackwardTraceability>();
-        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer();
+        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer("source", "target");
 
         sources.add(new SourceElement("sA", "location sA"));
         targetTraceabilities.add(new BackwardTraceability(new TargetElement("tA", "location tA"), new ArrayList<String>()));
@@ -223,7 +223,7 @@ class TraceabilityAnalyzerTest {
         
         final List<SourceElement> sources = new ArrayList<SourceElement>();
         final List<BackwardTraceability> targetTraceabilities  = new ArrayList<BackwardTraceability>();
-        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer();
+        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer("source", "target");
 
         sources.add(new SourceElement("sA", "location sA"));
         sources.add(new SourceElement("sB", "location sB"));
@@ -239,7 +239,7 @@ class TraceabilityAnalyzerTest {
         
         final List<SourceElement> sources = new ArrayList<SourceElement>();
         final List<BackwardTraceability> targetTraceabilities  = new ArrayList<BackwardTraceability>();
-        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer();
+        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer("source", "target");
 
         sources.add(new SourceElement("sA", "location sA"));
         targetTraceabilities.add(new BackwardTraceability(new TargetElement("tA", "location tA"), Arrays.asList("sA", "sB")));
@@ -263,7 +263,7 @@ class TraceabilityAnalyzerTest {
         
         final List<SourceElement> sources = new ArrayList<SourceElement>();
         final List<BackwardTraceability> targetTraceabilities  = new ArrayList<BackwardTraceability>();
-        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer();
+        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer("source", "target");
 
         sources.add(new SourceElement("sA", "location sA"));
         targetTraceabilities.add(new BackwardTraceability(new TargetElement("tA", "location tA"), Arrays.asList("sA")));
@@ -281,7 +281,7 @@ class TraceabilityAnalyzerTest {
         
         final List<SourceElement> sources = new ArrayList<SourceElement>();
         final List<BackwardTraceability> targetTraceabilities  = new ArrayList<BackwardTraceability>();
-        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer();
+        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer("source", "target");
 
         sources.add(new SourceElement("sC", "location sC"));
         sources.add(new SourceElement("sB", "location sB"));
@@ -319,7 +319,7 @@ class TraceabilityAnalyzerTest {
         
         final List<SourceElement> sources = new ArrayList<SourceElement>();
         final List<BackwardTraceability> targetTraceabilities  = new ArrayList<BackwardTraceability>();
-        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer();
+        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer("source", "target");
 
         sources.add(new SourceElement("sC", "location sC"));
         sources.add(new SourceElement("sA", "location sA"));

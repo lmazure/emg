@@ -27,7 +27,7 @@ public class App
         final Application app = new Application();
         app.parseCommandeLine(args);
         
-        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer();
+        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer("requirement", "test");
         final Analysis analysis = analyzer.analyze(app.parseSpecFiles(), app.parseTestFiles());
         
         final AnalysisFormater formatter = new AnalysisFormater();

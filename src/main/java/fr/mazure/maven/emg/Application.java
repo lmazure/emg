@@ -145,7 +145,7 @@ public class Application {
     static private boolean isTestTable(final Table table) {
 
         if (table.getNumberOfRows() < 3) return false;
-        if (table.getNumberOfColumns() != 2) return false;
+        if ((table.getNumberOfColumns() != 2) && (table.getNumberOfColumns() != 3)) return false; // sometime the table has three columns with a merges cells on each row
         if (table.isCellMerged(0, 0)) return false;
         if (table.isCellMerged(1, 0)) return false;
         if (table.isCellMerged(0, 1)) return false;

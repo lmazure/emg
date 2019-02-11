@@ -10,8 +10,8 @@ public class AnalysisFormater {
 
     public void format(final OutputStream stream, final Analysis analysis) throws IOException {
         
-        try (final BufferedOutputStream s = new BufferedOutputStream(stream);
-            final PrintStream p = new PrintStream(s, false, StandardCharsets.UTF_8)) {
+        try (final OutputStream s = new BufferedOutputStream(stream);
+            final PrintStream p = new PrintStream(s, false, StandardCharsets.UTF_8.name())) {
             p.println("<!DOCTYPE html>");
             p.println("<html>");
             p.println("<head>");

@@ -19,6 +19,7 @@ class OdtTableExtractorTest {
 
         assertEquals(1, list.size());
         assertEquals("TableOne", list.get(0).getName());
+        assertFalse(list.get(0).hasHeaderRow());
         assertEquals(1, list.get(0).getNumberOfRows());
         assertEquals(1, list.get(0).getNumberOfColumns());
         assertEquals("Cell 1-1", list.get(0).getCellContent(0, 0));
@@ -31,6 +32,7 @@ class OdtTableExtractorTest {
         assertEquals(3, list.size());
         
         assertEquals("Table1", list.get(0).getName());
+        assertFalse(list.get(0).hasHeaderRow());
         assertEquals(3, list.get(0).getNumberOfRows());
         assertEquals(2, list.get(0).getNumberOfColumns());
         assertEquals("a", list.get(0).getCellContent(0, 0));
@@ -41,6 +43,7 @@ class OdtTableExtractorTest {
         assertEquals("f", list.get(0).getCellContent(1, 2));
 
         assertEquals("Table2", list.get(1).getName());
+        assertFalse(list.get(1).hasHeaderRow());
         assertEquals(4, list.get(1).getNumberOfRows());
         assertEquals(1, list.get(1).getNumberOfColumns());
         assertEquals("g", list.get(1).getCellContent(0, 0));
@@ -49,6 +52,7 @@ class OdtTableExtractorTest {
         assertEquals("j", list.get(1).getCellContent(0, 3));
 
         assertEquals("Table3", list.get(2).getName());
+        assertFalse(list.get(2).hasHeaderRow());
         assertEquals(1, list.get(2).getNumberOfRows());
         assertEquals(5, list.get(2).getNumberOfColumns());
         assertEquals("k", list.get(2).getCellContent(0, 0));
@@ -64,6 +68,7 @@ class OdtTableExtractorTest {
 
         assertEquals(1, list.size());
         assertEquals("Table1", list.get(0).getName());
+        assertFalse(list.get(0).hasHeaderRow());
         assertEquals(2, list.get(0).getNumberOfRows());
         assertEquals(2, list.get(0).getNumberOfColumns());
         assertEquals("a", list.get(0).getCellContent(0, 0));
@@ -79,6 +84,7 @@ class OdtTableExtractorTest {
         assertEquals(3, list.size());
         
         assertEquals("Tableau1", list.get(0).getName());
+        assertFalse(list.get(0).hasHeaderRow());
         assertEquals(2, list.get(0).getNumberOfRows());
         assertEquals(2, list.get(0).getNumberOfColumns());
         assertEquals(false, list.get(0).isCellMerged(0, 0));  assertEquals("1", list.get(0).getCellContent(0, 0));
@@ -87,6 +93,7 @@ class OdtTableExtractorTest {
         assertEquals(false, list.get(0).isCellMerged(1, 1));  assertEquals("3", list.get(0).getCellContent(1, 1));
 
         assertEquals("Tableau2", list.get(1).getName());
+        assertFalse(list.get(1).hasHeaderRow());
         assertEquals(2, list.get(1).getNumberOfRows());
         assertEquals(2, list.get(1).getNumberOfColumns());
         assertEquals(false, list.get(1).isCellMerged(0, 0));  assertEquals("1", list.get(1).getCellContent(0, 0));
@@ -95,6 +102,7 @@ class OdtTableExtractorTest {
         assertEquals(false, list.get(1).isCellMerged(1, 1));  assertEquals("3", list.get(1).getCellContent(1, 1));
         
         assertEquals("Tableau3", list.get(2).getName());
+        assertFalse(list.get(2).hasHeaderRow());
         assertEquals(5, list.get(2).getNumberOfRows());
         assertEquals(4, list.get(2).getNumberOfColumns());
         assertEquals(false, list.get(2).isCellMerged(0, 0));  assertEquals("1", list.get(2).getCellContent(0, 0));
@@ -117,5 +125,25 @@ class OdtTableExtractorTest {
         assertEquals(false, list.get(2).isCellMerged(1, 4));  assertEquals("10", list.get(2).getCellContent(1, 4));
         assertEquals(false, list.get(2).isCellMerged(2, 4));  assertEquals("11", list.get(2).getCellContent(2, 4));
         assertEquals(true, list.get(2).isCellMerged(3, 4));   assertEquals(new CellLocation(3, 3), list.get(2).getCellMerge(3, 4));       
+    }
+    
+    @Test
+    void canExtractOneTableWithHeader() {
+        List<Table> list = OdtTableExtractor.extract(new File("testdata/TableWithHeader.odt"));
+
+        assertEquals(1, list.size());
+        assertEquals("Tab*1", list.get(0).getName());
+        assertTrue(list.get(0).hasHeaderRow());
+        assertEquals(3, list.get(0).getNumberOfRows());
+        assertEquals(3, list.get(0).getNumberOfColumns());
+        assertEquals("head_1", list.get(0).getCellContent(0, 0));
+        assertEquals("head_2", list.get(0).getCellContent(1, 0));
+        assertEquals("head_3", list.get(0).getCellContent(2, 0));
+        assertEquals("A", list.get(0).getCellContent(0, 1));
+        assertEquals("B", list.get(0).getCellContent(1, 1));
+        assertEquals("C", list.get(0).getCellContent(2, 1));
+        assertEquals("D", list.get(0).getCellContent(0, 2));
+        assertEquals("E", list.get(0).getCellContent(1, 2));
+        assertEquals("F", list.get(0).getCellContent(2, 2));
     }
 }

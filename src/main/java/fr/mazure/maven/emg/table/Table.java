@@ -6,8 +6,16 @@ public class Table {
     final private int _numberOfColumns;
     final private int _numberOfRows;
     final private Object[][] _content;
+    final private boolean _hasHeaderRow;
     
-    public Table(final int numberOfColumns, final int numberOfRows, final String tableName) {
+    /**
+     * Create a Table of given size and name
+     * @param numberOfColumns
+     * @param numberOfRows
+     * @param tableName
+     * @param hasHeaderRow
+     */
+    public Table(final int numberOfColumns, final int numberOfRows, final String tableName, final boolean hasHeaderRow) {
         
         if (numberOfColumns <= 0) throw new IllegalArgumentException("numberOfColumns non positive (" + numberOfColumns + ")");
         if (numberOfRows <= 0) throw new IllegalArgumentException("numberOfRows non positive (" + numberOfRows + ")");
@@ -16,6 +24,7 @@ public class Table {
         _numberOfColumns = numberOfColumns;
         _numberOfRows = numberOfRows;
         _content = new Object[numberOfColumns][numberOfRows];
+        _hasHeaderRow = hasHeaderRow;
     }
     
     public void setCellContent(final int column, final int row, final String content) {
@@ -135,5 +144,9 @@ public class Table {
     public CellLocation isCellMerged(final CellLocation location) {
         
         return getCellMerge(location.getColumn(), location.getRow());
+    }
+    
+    public boolean hasHeaderRow() {
+        return _hasHeaderRow;
     }
 }

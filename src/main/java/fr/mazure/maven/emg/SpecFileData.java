@@ -11,6 +11,7 @@ public class SpecFileData {
 
     final private List<SourceElement> _sourceElements;
     final private List<String> _errors;
+    final static public String SPEC_ID_REGEXP = "[-A-Za-z0-9_]+";
     
     public SpecFileData(final List<File> specFiles) {        
 
@@ -48,8 +49,16 @@ public class SpecFileData {
 
         for (int row = 1; row < table.getNumberOfRows(); row++ ) {
             if (!table.isCellMerged(0, row)) {
-                final String location = "file='" + file.getAbsolutePath() + " table='" + table.getName() + "' row='" + (row + 1) + "'";
-                _sourceElements.add(new SourceElement(table.getCellContent(0, row), location));
+                final String specId = table.getCellContent(0, row);
+                final String requirement = table.getCellContent(1, row);
+                if (specId.isEmpty() && requirement.matches("Note\\h:.*")) {
+                    // row containing a comment
+                } else if (!specId.matches(SPEC_ID_REGEXP)) {
+                    _errors.add("Invalid spec Id '" + specId + "' in table='" + table.getName() + "' row='" + (row + 1) + "'");
+                } else {
+                    final String location = "file='" + file.getAbsolutePath() + " table='" + table.getName() + "' row='" + (row + 1) + "'";
+                    _sourceElements.add(new SourceElement(specId, location));
+                }
             }
         }
     }

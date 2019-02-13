@@ -14,6 +14,7 @@ public class TestFileData {
     
     private final List<BackwardTraceability> _backwardTraceabilities;
     private final List<String> _errors;
+    private static final Pattern _pattern = Pattern.compile(SpecFileData.SPEC_ID_REGEXP);
 
     public TestFileData(final List<File> testFiles) {        
 
@@ -50,8 +51,7 @@ public class TestFileData {
         final TargetElement testElement = new TargetElement(testId, "file='" + file.getAbsolutePath() + " table='" + table.getName() + "'");
 
         final String sources = table.getCellContent(1, 1);
-        final Pattern pattern = Pattern.compile("[-A-Za-z0-9_]+");
-        final Matcher matcher = pattern.matcher(sources);
+        final Matcher matcher = _pattern.matcher(sources);
         while (matcher.find()) {
             sourceIds.add(matcher.group());
         }

@@ -82,6 +82,9 @@ public class AnalysisFormater {
     }
     
     static private String toHtml(final String str) {
-        return str.replace("&", "amp;").replace(">", "gt;").replace("<", "lt;").replace("\n", "<br/>");
+        return str.replace("&", "amp;")
+                  .replace(">", "gt;")
+                  .replace("<", "lt;")
+                  .replace("\n", "<br/>");
     }
 }

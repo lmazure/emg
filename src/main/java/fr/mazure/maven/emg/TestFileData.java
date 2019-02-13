@@ -10,33 +10,39 @@ import fr.mazure.maven.emg.table.Table;
 import fr.mazure.maven.emg.traceability.BackwardTraceability;
 import fr.mazure.maven.emg.traceability.TargetElement;
 
-public class TestFileParser {
+public class TestFileData {
+    
+    private final List<BackwardTraceability> _backwardTraceabilities;
+    private final List<String> _errors;
 
-    static public List<BackwardTraceability> parseTestFiles(final List<File> testFiles) {        
+    public TestFileData(final List<File> testFiles) {        
 
-        final List<BackwardTraceability> backwardTraceabilities = new ArrayList<BackwardTraceability>();
+        _backwardTraceabilities = new ArrayList<BackwardTraceability>();
+        _errors = new ArrayList<String>();
         
         for (File file: testFiles) {
-            backwardTraceabilities.addAll(parseTestFile(file));
+            parseTestFile(file);
         }
-        
-        return backwardTraceabilities;
     }
 
-    static private List<BackwardTraceability> parseTestFile(final File file) {        
+    public List<BackwardTraceability> getBackwardTraceabilities() {
+        return _backwardTraceabilities;
+    }
+    
+    public List<String> getErrors() {
+        return _errors;
+    }
+    
+    private void parseTestFile(final File file) {        
 
-        final List<BackwardTraceability> backwardTraceabilities = new ArrayList<BackwardTraceability>();
-        
         for (Table table: OdtTableExtractor.extract(file)) {
             if (isTestTable(table)) {
-                backwardTraceabilities.add(parseTestTable(file, table));
+                parseTestTable(file, table);
             }
         }
-        
-        return backwardTraceabilities;
     }
 
-    static private BackwardTraceability parseTestTable(final File file, final Table table) {
+    private void parseTestTable(final File file, final Table table) {
 
         final List<String> sourceIds = new ArrayList<String>();
         
@@ -50,13 +56,13 @@ public class TestFileParser {
             sourceIds.add(matcher.group());
         }
         
-        return new BackwardTraceability(testElement, sourceIds);
+        _backwardTraceabilities.add(new BackwardTraceability(testElement, sourceIds));
     }
 
     static private boolean isTestTable(final Table table) {
 
         if (table.getNumberOfRows() < 3) return false;
-        if ((table.getNumberOfColumns() != 2) && (table.getNumberOfColumns() != 3)) return false; // sometime the table has three columns with a merges cells on each row
+        if ((table.getNumberOfColumns() != 2) && (table.getNumberOfColumns() != 3)) return false; // sometimes the table has three columns with a merges cells on each row
         if (table.isCellMerged(0, 0)) return false;
         if (table.isCellMerged(1, 0)) return false;
         if (table.isCellMerged(0, 1)) return false;

@@ -35,13 +35,15 @@ public class App
 
         parseCommandeLine(args);
         
+        final SpecFileData specData = new SpecFileData(_specFiles);
+        final TestFileData testData = new TestFileData(_testFiles);
         final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer("requirement", "test");
-        final Analysis analysis = analyzer.analyze(SpecFileParser.parseSpecFiles(_specFiles), TestFileParser.parseTestFiles(_testFiles));
+        final Analysis analysis = analyzer.analyze(specData.getSourceElements(), testData.getBackwardTraceabilities());
         
         final AnalysisFormater formatter = new AnalysisFormater();
         final File file = File.createTempFile("traceability", ".html");
         try (final OutputStream f = new FileOutputStream(file)) {
-            formatter.format(f, analysis);
+            formatter.format(f, specData.getErrors(), testData.getErrors(), analysis);
         }
         Desktop.getDesktop().browse(file.toURI());
     }

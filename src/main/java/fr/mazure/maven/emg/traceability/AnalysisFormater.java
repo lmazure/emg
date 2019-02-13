@@ -5,10 +5,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 public class AnalysisFormater {
 
-    public void format(final OutputStream stream, final Analysis analysis) throws IOException {
+    public void format(final OutputStream stream, final List<String>specParsingErrors, final List<String>testParsingErrors, final Analysis analysis) throws IOException {
         
         try (final OutputStream s = new BufferedOutputStream(stream);
             final PrintStream p = new PrintStream(s, false, StandardCharsets.UTF_8.name())) {
@@ -18,8 +19,24 @@ public class AnalysisFormater {
             p.println("<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
             p.println("</head>");
             p.println("<body>");
+            if (specParsingErrors.size() > 0) {
+                p.println("<h1>Specification parsing errors</h1>");                            
+                p.println("<table style='border-collapse: collapse;'>");
+                for (String error: specParsingErrors) {
+                    p.println("<tr><td style='border: 1px solid black;'>" + toHtml(error) + "</td></tr>");                                                
+                }
+                p.println("</table>");                            
+            }
+            if (testParsingErrors.size() > 0) {
+                p.println("<h1>Test parsing errors</h1>");                            
+                p.println("<table style='border-collapse: collapse;'>");
+                for (String error: testParsingErrors) {
+                    p.println("<tr><td style='border: 1px solid black;'>" + toHtml(error) + "</td></tr>");                                                
+                }
+                p.println("</table>");                            
+            }
             if (analysis.getErrors().size() > 0) {
-                p.println("<h1>Errors</h1>");                            
+                p.println("<h1>Traceability errors</h1>");                            
                 p.println("<table style='border-collapse: collapse;'>");
                 for (String error: analysis.getErrors()) {
                     p.println("<tr><td style='border: 1px solid black;'>" + toHtml(error) + "</td></tr>");                                                
@@ -44,6 +61,7 @@ public class AnalysisFormater {
                 p.println("</table>");                                            
                 p.println("<h1>Traceability as markup</h1>");                            
                 p.println("<pre>");                                            
+                p.println("h|*Exigence*|*Tests*|");                                            
                 for (ForwardTraceability trace: analysis.getForwardTraceability()) {
                     p.print("|" + toHtml(trace.getSource().getId()) + "|");
                     boolean first = true;
@@ -54,7 +72,7 @@ public class AnalysisFormater {
                         p.print(toHtml(elem.getId()));
                         first = false;
                     }
-                    p.println("|</br>");
+                    p.println("|");
                 }
                 p.println("</pre>");                                            
             }

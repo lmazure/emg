@@ -12,11 +12,6 @@ import fr.mazure.maven.emg.traceability.Analysis;
 import fr.mazure.maven.emg.traceability.AnalysisFormater;
 import fr.mazure.maven.emg.traceability.TraceabilityAnalyzer;
 
-/*
- * - add comments
- * - implement checTraceablity(List<Requirements>, List<UpwardTrace>) which return a List<DownwardTrace>)
- *   implement both makup and HTML printing of the traceability matrix 
- */
 public class App 
 {
     static final String _syntaxHelp = "syntax: java -jar emg.jar -spec <specFile1> <specFile2> ... -test  <testFile1> <testFile2> ..."; 

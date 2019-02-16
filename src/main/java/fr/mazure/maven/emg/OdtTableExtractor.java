@@ -22,6 +22,8 @@ import fr.mazure.maven.emg.table.Table;
 
 public class OdtTableExtractor {
 
+    static final DocumentBuilder _builder = createDocumentBuilder();
+
     static public List<Table> extract(final File file) {
 
         final Document document = extractXmlContent(file);
@@ -31,15 +33,14 @@ public class OdtTableExtractor {
 
     private static Document extractXmlContent(final File file)
     {
-        final String contentfilename = "content.xml";
+        final String contentFilename = "content.xml";
 
-        final DocumentBuilder builder = createDocumentBuilder();
         Document document = null;
 
         try (final ZipFile zipFile = new ZipFile(file)) {
-            final ZipEntry contentFile = zipFile.getEntry(contentfilename);
+            final ZipEntry contentFile = zipFile.getEntry(contentFilename);
             try {
-                document = builder.parse(new InputSource(zipFile.getInputStream(contentFile)));
+                document = _builder.parse(new InputSource(zipFile.getInputStream(contentFile)));
                 return document;
             } catch (final SAXException se){
                 System.err.println("Failed to parse the XML file");
@@ -51,7 +52,7 @@ public class OdtTableExtractor {
                 System.exit(1);
             }
         } catch (final Exception e) {
-            System.err.println("Failed to extract '" + contentfilename + "': " + e);
+            System.err.println("Failed to extract '" + contentFilename + "': " + e);
             e.printStackTrace();
             System.exit(1);
         }

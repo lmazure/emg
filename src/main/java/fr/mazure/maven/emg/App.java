@@ -18,6 +18,7 @@ public class App
     final private List<File> _specFiles;
     final private List<File> _testFiles;
 
+    @SuppressWarnings("unused")
     public static void main(final String[] args) throws IOException
     {
         new App(args);
@@ -59,9 +60,8 @@ public class App
             } else {
                 if (list == null) {
                     throw new IllegalArgumentException("Missing flag on the command line (" + _syntaxHelp + ")");                    
-                } else {
-                    list.add(new File(arg));
                 }
+                list.add(new File(arg));
             }
         }
     }

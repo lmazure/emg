@@ -33,33 +33,31 @@ public class OdtTableExtractor {
     {
         final String contentfilename = "content.xml";
 
-        DocumentBuilder builder = createDocumentBuilder();
+        final DocumentBuilder builder = createDocumentBuilder();
+        Document document = null;
 
-        ZipFile zipFile = null;
-        ZipEntry contentFile = null;
-        try {
-            zipFile = new ZipFile(file);
-            contentFile = zipFile.getEntry(contentfilename);
+        try (final ZipFile zipFile = new ZipFile(file)) {
+            final ZipEntry contentFile = zipFile.getEntry(contentfilename);
+            try {
+                document = builder.parse(new InputSource(zipFile.getInputStream(contentFile)));
+                return document;
+            } catch (final SAXException se){
+                System.err.println("Failed to parse the XML file");
+                se.printStackTrace();
+                System.exit(1);
+            } catch (final IOException ioe){
+                System.err.println("Failed to read the XML file");
+                ioe.printStackTrace();
+                System.exit(1);
+            }
         } catch (final Exception e) {
             System.err.println("Failed to extract '" + contentfilename + "': " + e);
             e.printStackTrace();
             System.exit(1);
-        }        
-
-        Document document = null;
-        try {
-            document = builder.parse(new InputSource(zipFile.getInputStream(contentFile)));
-        } catch (final SAXException se){
-            System.err.println("Failed to parse the XML file");
-            se.printStackTrace();
-            System.exit(1);
-        } catch (final IOException ioe){
-            System.err.println("Failed to read the XML file");
-            ioe.printStackTrace();
-            System.exit(1);
         }
         
-        return document;
+        // unreachable
+        return null;
     }
 
     private static DocumentBuilder createDocumentBuilder()

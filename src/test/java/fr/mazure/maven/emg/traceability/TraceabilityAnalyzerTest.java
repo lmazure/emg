@@ -253,7 +253,7 @@ class TraceabilityAnalyzerTest {
         assertEquals(1, analysis.getForwardTraceability().get(0).getSortedTargets().size());
         assertEquals("tA", analysis.getForwardTraceability().get(0).getSortedTargets().get(0).getId());
 
-        assertEquals("‽ sB ‽", analysis.getForwardTraceability().get(1).getSource().getId());
+        assertEquals("‽ non-existing source Id: sB ‽", analysis.getForwardTraceability().get(1).getSource().getId());
         assertEquals(1, analysis.getForwardTraceability().get(1).getSortedTargets().size());
         assertEquals("tA", analysis.getForwardTraceability().get(1).getSortedTargets().get(0).getId());
 }
@@ -355,11 +355,11 @@ class TraceabilityAnalyzerTest {
         assertEquals("tC", analysis.getForwardTraceability().get(2).getSortedTargets().get(0).getId());
         assertEquals("tE", analysis.getForwardTraceability().get(2).getSortedTargets().get(1).getId());
 
-        assertEquals("‽ sE ‽", analysis.getForwardTraceability().get(3).getSource().getId());
+        assertEquals("‽ non-existing source Id: sE ‽", analysis.getForwardTraceability().get(3).getSource().getId());
         assertEquals(1, analysis.getForwardTraceability().get(3).getSortedTargets().size());
         assertEquals("tD", analysis.getForwardTraceability().get(3).getSortedTargets().get(0).getId());
 
-        assertEquals("‽ sF ‽", analysis.getForwardTraceability().get(4).getSource().getId());
+        assertEquals("‽ non-existing source Id: sF ‽", analysis.getForwardTraceability().get(4).getSource().getId());
         assertEquals(2, analysis.getForwardTraceability().get(4).getSortedTargets().size());
         assertEquals("tB", analysis.getForwardTraceability().get(4).getSortedTargets().get(0).getId());
         assertEquals("tE", analysis.getForwardTraceability().get(4).getSortedTargets().get(1).getId());

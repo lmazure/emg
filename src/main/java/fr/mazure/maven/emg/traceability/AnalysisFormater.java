@@ -9,7 +9,22 @@ import java.util.List;
 
 public class AnalysisFormater {
 
-    public void format(final OutputStream stream, final List<String>specParsingErrors, final List<String>testParsingErrors, final Analysis analysis) throws IOException {
+    /**
+     * output a traceability analysis:
+     *  - traceability errors
+     *  - traceability matrix
+     *  - traceability matrix formatted in markup
+     *  
+     * @param stream
+     * @param specParsingErrors
+     * @param testParsingErrors
+     * @param analysis
+     * @throws IOException
+     */
+    public void format(final OutputStream stream,
+                       final List<String> specParsingErrors,
+                       final List<String> testParsingErrors,
+                       final Analysis analysis) throws IOException {
         
         try (final OutputStream s = new BufferedOutputStream(stream);
             final PrintStream p = new PrintStream(s, false, StandardCharsets.UTF_8.name())) {

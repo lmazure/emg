@@ -14,13 +14,28 @@ public class TraceabilityAnalyzer {
     final private String _sourceName;
     final private String _targetName;
 
-    public TraceabilityAnalyzer(final String sourceName, final String targetName) {
+    /**
+     * create a traceability analyzer
+     * 
+     * @param sourceName name of the type of the sources of the traceability (this is only used to generate messages that are easier to understand) 
+     * @param targetName name of the type of the targets of the traceability (this is only used to generate messages that are easier to understand)
+     */
+    public TraceabilityAnalyzer(final String sourceName,
+                                final String targetName) {
         
         _sourceName = sourceName;
         _targetName = targetName;
     }
 
-    public Analysis analyze(final List<SourceElement> sources, final List<BackwardTraceability> targetTraceabilities) {
+    /**
+     * generate an analysis
+     * 
+     * @param sources
+     * @param targetTraceabilities
+     * @return
+     */
+    public Analysis analyze(final List<SourceElement> sources,
+                            final List<BackwardTraceability> targetTraceabilities) {
         
         final Analysis analysis = new Analysis();
         
@@ -61,7 +76,7 @@ public class TraceabilityAnalyzer {
                 String id;
                 if (!realSourceIds.contains(sourceId)) {
                     analysis.addError(_targetName + " Id '" + bt.getTarget().getId() + "' refers a non-existing " + _sourceName + " Id: '" + sourceId + "'");
-                    id = "‽ " + sourceId + " ‽";
+                    id = generateFakeSourceId(sourceId);
                     if (!indexedMapOfSourceElement.containsKey(id)) {
                         final SourceElement pseudoSourceElement = new SourceElement(id, ""); 
                         indexedMapOfSourceElement.put(id, pseudoSourceElement);
@@ -105,7 +120,9 @@ public class TraceabilityAnalyzer {
         }
     }
     
-    private void detectDuplicatedIds(final List<String> ids, final String listDescription, final Analysis analysis) {
+    private void detectDuplicatedIds(final List<String> ids,
+                                     final String listDescription,
+                                     final Analysis analysis) {
 
         final Set<String> allIds = new HashSet<String>();
         final Set<String> duplicateIds = new HashSet<String>();
@@ -116,5 +133,15 @@ public class TraceabilityAnalyzer {
         for (String id: duplicateIds) {
             analysis.addError(listDescription + " contains a duplicated " + _sourceName + " Id: '" + id + "'");
         }
+    }
+    
+    /**
+     * fake Id used when a target Id refers a non-existing source Id
+     * 
+     * @param sourceId
+     * @return
+     */
+    private String generateFakeSourceId(final String sourceId) {
+        return "‽ non-existing " + _sourceName + " Id: " + sourceId + " ‽"; 
     }
 }

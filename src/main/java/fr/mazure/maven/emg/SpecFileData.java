@@ -51,10 +51,16 @@ public class SpecFileData {
             if (!table.isCellMerged(0, row)) {
                 final String specId = table.getCellContent(0, row);
                 final String requirement = table.getCellContent(1, row);
-                if (specId.isEmpty() && requirement.matches("Note\\h:.*")) {
-                    // row containing a comment
+                if (specId.isEmpty()) {
+                    if (isCommentExigence(requirement)) {
+                        // row containing a comment
+                    } else if (requirement.isEmpty()) {
+                        _errors.add("Empty row in file='" + file.getAbsolutePath() + "' table='" + table.getName() + "' row='" + (row + 1) + "'");                        
+                    } else {
+                        _errors.add("Empty spec Id table='" + table.getName() + "' row='" + (row + 1) + "'");                                                
+                    }
                 } else if (!specId.matches(SPEC_ID_REGEXP)) {
-                    _errors.add("Invalid spec Id '" + specId + "' in table='" + table.getName() + "' row='" + (row + 1) + "'");
+                    _errors.add("Invalid spec Id '" + specId + "' in file='" + file.getAbsolutePath() + "' table='" + table.getName() + "' row='" + (row + 1) + "'");
                 } else {
                     final String location = "file='" + file.getAbsolutePath() + " table='" + table.getName() + "' row='" + (row + 1) + "'";
                     _sourceElements.add(new SourceElement(specId, location));
@@ -72,5 +78,10 @@ public class SpecFileData {
         if (!table.getCellContent(1, 0).trim().equals("Exigence")) return false;
         
         return true;
+    }
+    
+    private boolean isCommentExigence(final String requirement) {
+        
+        return requirement.matches("(?i:note\\h:.*)") || requirement.matches("(?i:com\\h:.*)");
     }
 }

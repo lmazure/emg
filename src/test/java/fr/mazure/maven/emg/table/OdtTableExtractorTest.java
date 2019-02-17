@@ -146,4 +146,30 @@ class OdtTableExtractorTest {
         assertEquals("E", list.get(0).getCellContent(1, 2));
         assertEquals("F", list.get(0).getCellContent(2, 2));
     }
+    
+    @Test
+    void deletedTextIsIgnored() {
+        List<Table> list = OdtTableExtractor.extract(new File("testdata/TableWithDeletedText.odt"));
+
+        assertEquals(1, list.size());
+        assertEquals("Tableau1", list.get(0).getName());
+        assertFalse(list.get(0).hasHeaderRow());
+        assertEquals(5, list.get(0).getNumberOfRows());
+        assertEquals(3, list.get(0).getNumberOfColumns());
+        assertEquals("X", list.get(0).getCellContent(0, 0));
+        assertEquals("B", list.get(0).getCellContent(1, 0));
+        assertEquals("C", list.get(0).getCellContent(2, 0));
+        assertEquals("D", list.get(0).getCellContent(0, 1));
+        assertEquals("E", list.get(0).getCellContent(1, 1));
+        assertEquals("F", list.get(0).getCellContent(2, 1));
+        assertEquals("", list.get(0).getCellContent(0, 2));
+        assertEquals("", list.get(0).getCellContent(1, 2));
+        assertEquals("", list.get(0).getCellContent(2, 2));
+        assertEquals("J", list.get(0).getCellContent(0, 3));
+        assertEquals("K", list.get(0).getCellContent(1, 3));
+        assertEquals("L", list.get(0).getCellContent(2, 3));
+        assertEquals("", list.get(0).getCellContent(0, 4));
+        assertEquals("", list.get(0).getCellContent(1, 4));
+        assertEquals("", list.get(0).getCellContent(2, 4));
+    }
 }

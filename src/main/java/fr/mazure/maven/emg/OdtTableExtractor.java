@@ -83,7 +83,8 @@ public class OdtTableExtractor {
         final NodeList list = racine.getElementsByTagName("table:table");
 
         for (int i = 0; i < list.getLength(); i++) {
-            if (!isInTable((Element)list.item(i))) {
+            final Element element = (Element)list.item(i); 
+            if (!isInTable(element) && !isTrackedDeletion(element)) {
                 tableList.add(extractTable((Element)list.item(i)));
             }
         }
@@ -174,12 +175,24 @@ public class OdtTableExtractor {
     
     private static boolean isInTable(final Element node) {
         
+        return isInContainingNode(node, "table:table");
+    }
+
+    private static boolean isTrackedDeletion(final Element node) {
+        
+        return isInContainingNode(node, "text:tracked-changes");
+    }
+
+    private static boolean isInContainingNode(final Element node, final String containingNodeName) {
+        
         if (node.getParentNode() instanceof Document) return false;
         
         final Element parent = (Element)node.getParentNode();
         
-        if (parent.getNodeName().equals("table:table")) return true;
+        if (parent.getNodeName().equals(containingNodeName)) return true;
         
-        return isInTable(parent);
+        return isInContainingNode(parent, containingNodeName);
     }
+
+
 }

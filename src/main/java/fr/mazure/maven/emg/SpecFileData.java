@@ -57,12 +57,12 @@ public class SpecFileData {
                     } else if (requirement.isEmpty()) {
                         _errors.add("empty row in file='" + file.getAbsolutePath() + "' table='" + table.getName() + "' row='" + (row + 1) + "'");                        
                     } else {
-                        _errors.add("empty spec Id table='" + table.getName() + "' row='" + (row + 1) + "'");                                                
+                        _errors.add("empty spec Id in file='" + file.getAbsolutePath() + "' table='" + table.getName() + "' row='" + (row + 1) + "'");                                                
                     }
                 } else if (!specId.matches(SPEC_ID_REGEXP)) {
                     _errors.add("invalid spec Id '" + specId + "' in file='" + file.getAbsolutePath() + "' table='" + table.getName() + "' row='" + (row + 1) + "'");
                 } else {
-                    final String location = "file='" + file.getAbsolutePath() + " table='" + table.getName() + "' row='" + (row + 1) + "'";
+                    final String location = "file='" + file.getAbsolutePath() + "' table='" + table.getName() + "' row='" + (row + 1) + "'";
                     _sourceElements.add(new SourceElement(specId, location));
                 }
             }

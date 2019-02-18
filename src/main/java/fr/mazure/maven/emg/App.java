@@ -33,7 +33,7 @@ public class App
         
         final SpecFileData specData = new SpecFileData(_specFiles);
         final TestFileData testData = new TestFileData(_testFiles);
-        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer("requirement", "test");
+        final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer("spec", "test");
         final Analysis analysis = analyzer.analyze(specData.getSourceElements(), testData.getBackwardTraceabilities());
         
         final AnalysisFormater formatter = new AnalysisFormater();

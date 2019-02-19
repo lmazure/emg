@@ -39,7 +39,7 @@ public class App
         final AnalysisFormater formatter = new AnalysisFormater();
         final File file = File.createTempFile("traceability", ".html");
         try (final OutputStream f = new FileOutputStream(file)) {
-            formatter.format(f, specData.getErrors(), testData.getErrors(), analysis);
+            formatter.format(f, "spec", "test", specData.getErrors(), testData.getErrors(), analysis);
         }
         Desktop.getDesktop().browse(file.toURI());
     }

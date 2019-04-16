@@ -78,7 +78,7 @@ public class AnalysisFormater {
                     }
                     p.println("</td></tr>");                                                
                 }
-                p.println("</table>");                                            
+                p.println("</table>");                  
                 p.println("<h1>Traceability as markup</h1>");                            
                 p.println("<pre>");                                            
                 p.println("h|*" + toHtml(sourceName) + "*|*" + toHtml(targetName) + "*|");                                            
@@ -93,6 +93,13 @@ public class AnalysisFormater {
                         first = false;
                     }
                     p.println("|");
+                }
+                p.println("</pre>");                                            
+                p.println("<h1>Test report as markup</h1>");                            
+                p.println("<pre>");                                            
+                p.println("h|*" + toHtml(sourceName) + "*|*itération 1*|*itération 2*|*itération 3*|bug ID|commentaire|");                                            
+                for (ForwardTraceability trace: analysis.getForwardTraceability()) {
+                    p.println("|" + toHtml(trace.getSource().getId()) + "||||||");
                 }
                 p.println("</pre>");                                            
             }

@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.mazure.maven.emg.traceability.Analysis;
-import fr.mazure.maven.emg.traceability.AnalysisFormater;
+import fr.mazure.maven.emg.traceability.AnalysisFormatter;
+import fr.mazure.maven.emg.traceability.TargetListReportFormatter;
 import fr.mazure.maven.emg.traceability.TraceabilityAnalyzer;
 
 public class App 
@@ -36,12 +37,20 @@ public class App
         final TraceabilityAnalyzer analyzer = new TraceabilityAnalyzer("spec", "test");
         final Analysis analysis = analyzer.analyze(specData.getSourceElements(), testData.getBackwardTraceabilities());
         
-        final AnalysisFormater formatter = new AnalysisFormater();
-        final File file = File.createTempFile("traceability", ".html");
-        try (final OutputStream f = new FileOutputStream(file)) {
-            formatter.format(f, "spec", "test", specData.getErrors(), testData.getErrors(), analysis);
+        final AnalysisFormatter analysisformatter = new AnalysisFormatter("spec", "test");
+        final File analysisFile = File.createTempFile("traceability", ".html");
+        try (final OutputStream f = new FileOutputStream(analysisFile)) {
+            analysisformatter.format(f, specData.getErrors(), testData.getErrors(), analysis);
         }
-        Desktop.getDesktop().browse(file.toURI());
+        Desktop.getDesktop().browse(analysisFile.toURI());
+
+        final TargetListReportFormatter testReportformatter = new TargetListReportFormatter("test", "itération", "bug ID", "commentaire");
+        final File testReportFile = File.createTempFile("test-report", ".html");
+        try (final OutputStream f = new FileOutputStream(testReportFile)) {
+            testReportformatter.format(f, testData.getBackwardTraceabilities());
+        }
+        Desktop.getDesktop().browse(testReportFile.toURI());
+
     }
 
     private void parseCommandeLine(final String[] args) {

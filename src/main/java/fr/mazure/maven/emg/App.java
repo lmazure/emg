@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,14 +43,15 @@ public class App
         try (final OutputStream f = new FileOutputStream(analysisFile)) {
             analysisformatter.format(f, specData.getErrors(), testData.getErrors(), analysis);
         }
-        Desktop.getDesktop().browse(analysisFile.toURI());
+        displayUriInBrowser(analysisFile.toURI());
 
-        final TargetListReportFormatter testReportformatter = new TargetListReportFormatter("test", "itération", "bug ID", "commentaire");
+        final TargetListReportFormatter testReportformatter =
+            new TargetListReportFormatter("test", new String[] { "itération 1", "itération 2", "itération 3", "bug ID", "commentaire" });
         final File testReportFile = File.createTempFile("test-report", ".html");
         try (final OutputStream f = new FileOutputStream(testReportFile)) {
             testReportformatter.format(f, testData.getBackwardTraceabilities());
         }
-        Desktop.getDesktop().browse(testReportFile.toURI());
+        displayUriInBrowser(testReportFile.toURI());
 
     }
 
@@ -73,5 +75,10 @@ public class App
                 list.add(new File(arg));
             }
         }
+    }
+    
+    static private void displayUriInBrowser(final URI uri) throws IOException {
+        
+        Desktop.getDesktop().browse(uri);
     }
 }
